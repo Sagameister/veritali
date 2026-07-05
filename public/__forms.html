@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Netlify Forms Target</title>
+</head>
+<body>
+  <!-- This static file is required for Netlify to register forms in Next.js v5 Runtime. -->
+  <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field">
+    <input type="text" name="name" />
+    <input type="text" name="location" />
+    <input type="text" name="phone" />
+    <input type="email" name="email" />
+    <textarea name="message"></textarea>
+    <input type="text" name="serviceType" />
+    <input type="checkbox" name="consent" />
+  </form>
+</body>
+</html>

@@ -319,8 +319,6 @@ export function ConsultationForm({
             <form
               name="contact"
               method="POST"
-              data-netlify="true"
-              data-netlify-honeypot="bot-field"
               onSubmit={handleFormSubmit}
               className="flex flex-col gap-8"
             >
