@@ -69,18 +69,21 @@ export default function GalleryStrip({
       const isMobile = window.innerWidth < 768;
       if (reduced || isMobile || !scrollRef.current) return;
 
-      const totalScrollWidth = scrollRef.current.scrollWidth;
-      const windowWidth = window.innerWidth;
-
       gsap.to(scrollRef.current, {
-        x: () => -(totalScrollWidth - windowWidth),
+        x: () => {
+          if (!scrollRef.current) return 0;
+          return -(scrollRef.current.scrollWidth - window.innerWidth);
+        },
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           pin: true,
           scrub: 1,
           start: "top top",
-          end: () => `+=${totalScrollWidth - windowWidth}`,
+          end: () => {
+            if (!scrollRef.current) return "+=0";
+            return `+=${scrollRef.current.scrollWidth - window.innerWidth}`;
+          },
           invalidateOnRefresh: true,
         },
       });
@@ -114,10 +117,6 @@ export default function GalleryStrip({
           <button
             key={idx}
             onClick={(e) => {
-              // e.detail > 0 = real mouse/touch click → drop focus so no
-              // outline lingers. Keyboard "clicks" (Enter/Space) have
-              // detail 0 and KEEP focus, so keyboard users don't lose
-              // their place (WCAG 2.4.7).
               if (e.detail > 0) e.currentTarget.blur();
               setLightbox(idx);
             }}
@@ -127,6 +126,7 @@ export default function GalleryStrip({
             <img
               src={img.src}
               alt={`${alt} — ${img.label[lang]}`}
+              onLoad={() => ScrollTrigger.refresh()}
               className="w-full aspect-[4/3] object-cover"
             />
             <RoomBadge label={img.label[lang]} />
@@ -147,8 +147,6 @@ export default function GalleryStrip({
             <button
               key={idx}
               onClick={(e) => {
-                // Mouse/touch clicks (detail > 0) blur → no lingering line.
-                // Keyboard activations keep focus (WCAG 2.4.7).
                 if (e.detail > 0) e.currentTarget.blur();
                 setLightbox(idx);
               }}
@@ -159,6 +157,7 @@ export default function GalleryStrip({
               <img
                 src={img.src}
                 alt={`${alt} — ${img.label[lang]}`}
+                onLoad={() => ScrollTrigger.refresh()}
                 className="h-full w-auto object-cover transition-transform duration-1000 ease-editorial group-hover:scale-[1.03]"
               />
               {/* Photo counter (bottom-left) + room label (bottom-right) */}
