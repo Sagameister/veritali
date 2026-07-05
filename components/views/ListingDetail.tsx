@@ -109,6 +109,155 @@ function RelatedCard({ listing, lang }: { listing: Listing; lang: Language }) {
   );
 }
 
+// Interactive Inquiry Form for dynamic listing pages
+function PropertyInquiryForm({ listing, lang }: { listing: Listing; lang: Language }) {
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    // Make sure property-specific information is updated in the standard Netlify form payload
+    const absLink = typeof window !== "undefined" 
+      ? window.location.href 
+      : `https://veritali.de/objekte/${listing.slug}`;
+    formData.set("propertyLink", absLink);
+    formData.set("propertyName", t(listing.title, lang));
+
+    try {
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        throw new Error("Property inquiry failed");
+      }
+    } catch (err) {
+      console.error(err);
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const labels = {
+    de: {
+      heading: "Interesse an diesem Objekt?",
+      sub: "Senden Sie uns eine Anfrage für weitere Unterlagen oder einen Besichtigungstermin.",
+      name: "Ihr Name (erforderlich)",
+      email: "Ihre E-Mail-Adresse (erforderlich)",
+      message: "Ihre Nachricht...",
+      defaultMsg: `Guten Tag,\n\nich interessiere mich für das Objekt "${t(listing.title, "de")}" und bitte um Kontaktaufnahme.\n\nMit freundlichen Grüßen`,
+      submit: "ANFRAGE SENDEN →",
+      success: "Vielen Dank. Ihre Anfrage zu diesem Objekt wurde erfolgreich übermittelt. Wir melden uns in Kürze bei Ihnen.",
+      sending: "Wird gesendet..."
+    },
+    en: {
+      heading: "Interested in this property?",
+      sub: "Send us an inquiry to request further documents or schedule a viewing.",
+      name: "Your Name (required)",
+      email: "Your Email Address (required)",
+      message: "Your Message...",
+      defaultMsg: `Hello,\n\nI am interested in the property "${t(listing.title, "en")}" and would like to request more details.\n\nBest regards`,
+      submit: "SEND INQUIRY →",
+      success: "Thank you. Your inquiry for this property has been successfully sent. We will get back to you shortly.",
+      sending: "Sending..."
+    }
+  };
+
+  const l = labels[lang];
+
+  useEffect(() => {
+    setMessage(l.defaultMsg);
+  }, [lang, listing.title, l.defaultMsg]);
+
+  if (submitted) {
+    return (
+      <div className="border-t border-brand-text/10 pt-12 mt-16">
+        <p className="font-sans font-medium text-fs-body-m text-brand-accent p-6 border border-brand-accent/30 bg-brand-accent/5 rounded">
+          ✓ {l.success}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="border-t border-brand-text/10 pt-12 mt-16">
+      <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h3 text-brand-text mb-2">
+        {l.heading}
+      </h3>
+      <p className="font-sans font-medium text-fs-small text-brand-muted mb-8 leading-relaxed">
+        {l.sub}
+      </p>
+      <form
+        name="property-inquiry"
+        method="POST"
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-6"
+      >
+        <input type="hidden" name="form-name" value="property-inquiry" />
+        <p className="hidden">
+          <label>
+            Don’t fill this out if you're human: <input name="bot-field" />
+          </label>
+        </p>
+        <input type="hidden" name="propertyName" value={t(listing.title, lang)} />
+        <input type="hidden" name="propertyLink" value="" />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <input
+            type="text"
+            name="name"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={l.name}
+            className="w-full border-b border-brand-text/20 py-3 bg-transparent text-brand-text placeholder:text-brand-text/40 focus:outline-none focus:border-brand-accent transition-colors duration-700 font-sans font-medium text-fs-small"
+          />
+          <input
+            type="email"
+            name="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={l.email}
+            className="w-full border-b border-brand-text/20 py-3 bg-transparent text-brand-text placeholder:text-brand-text/40 focus:outline-none focus:border-brand-accent transition-colors duration-700 font-sans font-medium text-fs-small"
+          />
+        </div>
+
+        <textarea
+          name="message"
+          rows={5}
+          required
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder={l.message}
+          className="w-full border border-brand-text/10 bg-transparent p-4 text-brand-text placeholder:text-brand-text/40 focus:outline-none focus:border-brand-accent transition-colors duration-700 font-sans font-medium text-fs-small resize-none leading-relaxed"
+        />
+
+        <div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-8 py-4 border border-brand-accent/50 text-xs font-display font-medium uppercase tracking-widest text-brand-accent hover:bg-brand-accent hover:text-brand-bg hover:border-brand-accent transition-all duration-300 cursor-pointer disabled:opacity-50"
+          >
+            {loading ? l.sending : l.submit}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
 export default function ListingDetail({
   listing,
   lang = DEFAULT_LANGUAGE,
@@ -238,6 +387,9 @@ export default function ListingDetail({
               </blockquote>
             </Reveal>
           )}
+
+          {/* Property inquiry form at the bottom of description */}
+          <PropertyInquiryForm listing={listing} lang={lang} />
         </div>
       </div>
 
