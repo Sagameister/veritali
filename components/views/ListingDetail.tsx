@@ -14,6 +14,7 @@
 //      prose and bullet lists, optional pull quote.
 //   6. Related object cards at the bottom (the other listings).
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import SplitText from "../shared/SplitText";
@@ -22,7 +23,8 @@ import ClipPathReveal from "../shared/ClipPathReveal";
 import GalleryStrip from "../shared/GalleryStrip";
 import DividerLine from "../shared/DividerLine";
 import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
-import { listings, t, DEFAULT_LANGUAGE } from "../../data/content";
+import { getListings } from "../../lib/listings";
+import { t, DEFAULT_LANGUAGE } from "../../data/content";
 import type { Language, Listing } from "../../types";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -64,26 +66,41 @@ function FactRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-/* ---- 6. Related object card (compact version of the portfolio card) ---- */
+/* ---- 6. Related object card (compact version matching the new card style) ---- */
 function RelatedCard({ listing, lang }: { listing: Listing; lang: Language }) {
   return (
-    <a href={`/objekte/${listing.slug}`} className="group block">
-      <div className="overflow-hidden">
-        <div className="transition-transform duration-1000 ease-editorial group-hover:scale-[1.03]">
-          <ClipPathReveal
-            src={listing.image}
-            alt={t(listing.title, lang)}
-            aspectRatioClassName="aspect-[4/3]"
-          />
+    <a href={`/objekte/${listing.slug}`} className="group flex flex-col h-full justify-between">
+      <div className="space-y-4">
+        {/* Photo */}
+        <div className="overflow-hidden aspect-[4/3] bg-brand-lightbg/5 relative">
+          <div className="w-full h-full transition-transform duration-1000 ease-editorial group-hover:scale-[1.03]">
+            <ClipPathReveal
+              src={listing.image}
+              alt={t(listing.title, lang)}
+              aspectRatioClassName="aspect-[4/3]"
+            />
+          </div>
+        </div>
+        
+        {/* Meta text */}
+        <div className="space-y-1.5">
+          <p className="font-sans font-medium text-[10px] uppercase tracking-[0.18em] text-brand-green">
+            {t(listing.category, lang)}
+          </p>
+          <h3 className="font-display font-medium text-base md:text-lg text-brand-text transition-colors duration-700 ease-editorial group-hover:text-brand-orange leading-snug line-clamp-2 min-h-[3.2em]">
+            {t(listing.title, lang)} <span className="text-brand-accent">+</span>
+          </h3>
+          <p className="font-sans font-medium text-[11px] text-brand-text/50">
+            {listing.location} — {listing.year}
+          </p>
+          <p className="font-sans font-medium text-[11px] text-brand-muted">
+            {listing.parameters}
+          </p>
         </div>
       </div>
-      <div className="mt-5">
-        <h3 className="font-display font-medium text-lg text-brand-text mb-2 transition-colors duration-700 ease-editorial group-hover:text-brand-orange">
-          {t(listing.title, lang)} <span className="text-brand-accent">+</span>
-        </h3>
-        <p className="font-sans font-medium text-xs text-brand-text/60 mb-1">
-          {listing.location} — {listing.year}
-        </p>
+
+      {/* Price at the bottom */}
+      <div className="pt-4 mt-auto">
         <p className="font-display font-medium text-base text-brand-accent">
           {listing.price}
         </p>
@@ -99,8 +116,15 @@ export default function ListingDetail({
   listing: Listing;
   lang?: Language;
 }) {
-  // All other listings become the "related objects" strip at the bottom.
-  const related = listings.filter((item) => item.slug !== listing.slug);
+  const [related, setRelated] = useState<Listing[]>([]);
+
+  useEffect(() => {
+    getListings().then((allListings) => {
+      // Filter out the current listing and take the latest 3
+      const filtered = allListings.filter((item) => item.slug !== listing.slug).slice(0, 3);
+      setRelated(filtered);
+    });
+  }, [listing.slug]);
 
   const factLabels = {
     object: lang === "de" ? "Objekt" : "About",
@@ -227,7 +251,9 @@ export default function ListingDetail({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {related.map((item) => (
-            <RelatedCard key={item.slug} listing={item} lang={lang} />
+            <div key={item.slug} className="border border-brand-text/10 p-5 flex flex-col justify-between rounded-sm">
+              <RelatedCard listing={item} lang={lang} />
+            </div>
           ))}
         </div>
       </section>
