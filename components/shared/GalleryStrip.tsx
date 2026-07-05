@@ -112,9 +112,9 @@ export default function GalleryStrip({
           <button
             onClick={() => scroll("left")}
             aria-label="Zurück scrollen"
-            className="absolute left-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-brand-text/20 bg-brand-bg/85 backdrop-blur-md flex items-center justify-center text-brand-text hover:border-brand-orange hover:text-brand-orange transition-colors duration-300 shadow-lg cursor-pointer"
+            className="absolute left-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-brand-accent/55 bg-brand-bg/90 backdrop-blur-md flex items-center justify-center text-brand-accent hover:border-brand-orange hover:text-brand-orange transition-colors duration-300 shadow-xl cursor-pointer"
           >
-            <span className="font-sans text-xl leading-none -translate-x-[1px]">‹</span>
+            <span className="font-sans text-2xl font-bold leading-none -translate-x-[1px]">‹</span>
           </button>
         )}
 
@@ -155,9 +155,9 @@ export default function GalleryStrip({
           <button
             onClick={() => scroll("right")}
             aria-label="Weiter scrollen"
-            className="absolute right-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-brand-text/20 bg-brand-bg/85 backdrop-blur-md flex items-center justify-center text-brand-text hover:border-brand-orange hover:text-brand-orange transition-colors duration-300 shadow-lg cursor-pointer"
+            className="absolute right-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-brand-accent/55 bg-brand-bg/90 backdrop-blur-md flex items-center justify-center text-brand-accent hover:border-brand-orange hover:text-brand-orange transition-colors duration-300 shadow-xl cursor-pointer"
           >
-            <span className="font-sans text-xl leading-none translate-x-[1px]">›</span>
+            <span className="font-sans text-2xl font-bold leading-none translate-x-[1px]">›</span>
           </button>
         )}
       </div>
