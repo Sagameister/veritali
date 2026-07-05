@@ -168,7 +168,7 @@ export async function getListings(): Promise<Listing[]> {
       return mockListings;
     }
 
-    return units.filter((unit: any) => unit.title).map(mapPropstackUnitToListing);
+    return units.filter((unit: any) => unit.title?.value).map(mapPropstackUnitToListing);
   } catch (error) {
     console.error("Failed to fetch listings from Propstack API, using fallback:", error);
     return mockListings;
