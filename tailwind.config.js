@@ -37,9 +37,9 @@ module.exports = {
         "fs-h1-m": ["2.25rem", { lineHeight: "1.15", letterSpacing: "-0.02em" }],
         "fs-h2": ["2rem", { lineHeight: "1.25" }],
         "fs-h2-m": ["1.5rem", { lineHeight: "1.3" }],
-        "fs-body": ["1.125rem", { lineHeight: "1.65" }],
-        "fs-body-m": ["1rem", { lineHeight: "1.6" }],
-        "fs-small": ["0.875rem", { lineHeight: "1.5" }],
+        "fs-body": ["1.2rem", { lineHeight: "1.75" }],
+        "fs-body-m": ["1.0625rem", { lineHeight: "1.7" }],
+        "fs-small": ["0.9375rem", { lineHeight: "1.65" }],
         // Line-height raised from 1 → 1.7 so multi-line labels (like the
         // regions strip) breathe instead of cramming together.
         "fs-label": ["0.75rem", { lineHeight: "1.7", letterSpacing: "0.18em" }],
