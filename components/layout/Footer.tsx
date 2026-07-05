@@ -76,7 +76,7 @@ export default function Footer({ lang = DEFAULT_LANGUAGE }: { lang?: Language })
         ))}
 
         {/* Contact column */}
-        <div className="md:col-span-1">
+        <div className="md:col-span-2">
           <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-accent mb-6">
             {lang === "de" ? "Kontakt" : "Contact"}
           </p>
@@ -89,7 +89,7 @@ export default function Footer({ lang = DEFAULT_LANGUAGE }: { lang?: Language })
         </div>
 
         {/* Mailing list column */}
-        <div className="md:col-span-3">
+        <div className="md:col-span-2">
           <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-accent mb-6">
             {lang === "de" ? "Newsletter" : "Mailing List"}
           </p>
