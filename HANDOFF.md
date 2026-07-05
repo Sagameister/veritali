@@ -260,3 +260,8 @@ public/images/          veritali-logo-white.svg, hilfsprojekte/ (empty)
 CLAUDE.md, design.md, agent.md, content.md   original briefs (superseded
                                              where this doc differs)
 ```
+
+## 11. Pre-Launch Tasks & Checklist
+- **Email Address Update:** The email is currently mocked to `kontakt@veritali.de` and encoded in base64 inside `components/layout/Footer.tsx`. Before launch, Verena's official email address must be generated, and the base64 string in `Footer.tsx` (the `atob("...")` parameter) + metadata in `app/layout.tsx` + `data/content.ts` must be updated to match the new mailbox.
+- **Remove SEO block:** Remove `index: false, follow: false` from `app/layout.tsx` metadata and remove `Disallow: /` from `public/robots.txt`.
+- **Set Mailchimp variables:** Ensure Netlify settings have correct `MAILCHIMP_API_KEY` (with correct suffix, e.g. `-usXX`) and `MAILCHIMP_AUDIENCE_ID` (`d04c3a9d74`).
