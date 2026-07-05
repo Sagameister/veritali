@@ -117,7 +117,8 @@ function TestimonialCard({
 
 export default function ClientStories({ lang = DEFAULT_LANGUAGE }: { lang?: Language }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [autoplay, setAutoplay] = useState(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isInteracting, setIsInteracting] = useState(false);
   const [scrollState, setScrollState] = useState({ isStart: true, isEnd: false });
 
   const handleScroll = () => {
@@ -128,8 +129,18 @@ export default function ClientStories({ lang = DEFAULT_LANGUAGE }: { lang?: Lang
     setScrollState({ isStart, isEnd });
   };
 
+  const pauseAutoplayTemporarily = () => {
+    setIsInteracting(true);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setIsInteracting(false);
+    }, 10000); // Resume autoplay after 10s of no button clicks
+  };
+
   const scroll = (direction: "left" | "right") => {
-    setAutoplay(false); // Pause autoplay on manual scroll interaction
+    pauseAutoplayTemporarily();
     const container = scrollRef.current;
     if (!container) return;
 
@@ -148,7 +159,7 @@ export default function ClientStories({ lang = DEFAULT_LANGUAGE }: { lang?: Lang
   };
 
   useEffect(() => {
-    if (!autoplay) return;
+    if (isInteracting) return;
 
     const interval = setInterval(() => {
       const container = scrollRef.current;
@@ -170,10 +181,23 @@ export default function ClientStories({ lang = DEFAULT_LANGUAGE }: { lang?: Lang
     }, 5500);
 
     return () => clearInterval(interval);
-  }, [autoplay]);
+  }, [isInteracting]);
 
-  const handleMouseEnter = () => setAutoplay(false);
-  const handleTouchStart = () => setAutoplay(false);
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const handleMouseEnter = () => setIsInteracting(true);
+  const handleMouseLeave = () => setIsInteracting(false);
+  const handleTouchStart = () => setIsInteracting(true);
+  const handleTouchEnd = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setIsInteracting(false);
+    }, 4000); // Resume autoplay 4s after user stops swiping on mobile
+  };
 
   return (
     <section id="stories" className="py-28 px-6 md:px-12 bg-brand-bg overflow-hidden">
@@ -207,7 +231,9 @@ export default function ClientStories({ lang = DEFAULT_LANGUAGE }: { lang?: Lang
       <div
         className="relative w-full group/ticker"
         onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {/* Left Arrow */}
         <button
