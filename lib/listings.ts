@@ -130,6 +130,19 @@ function mapPropstackUnitToListing(unit: any): Listing {
 }
 
 export async function getListings(): Promise<Listing[]> {
+  // If running in the browser (client-side), query our secure API route
+  if (typeof window !== "undefined") {
+    try {
+      const res = await fetch("/api/listings");
+      if (!res.ok) throw new Error(`API route failed with status ${res.status}`);
+      return await res.json();
+    } catch (error) {
+      console.error("Client fetch from /api/listings failed, falling back to static:", error);
+      return mockListings;
+    }
+  }
+
+  // If running on the server (during build or in the API route itself), fetch from Propstack directly
   if (!PROPSTACK_API_KEY) {
     console.log("Propstack API Key is not set, using static mock listings.");
     return mockListings;
