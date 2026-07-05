@@ -32,6 +32,10 @@ export const metadata: Metadata = {
   },
   description:
     "Ihr kompetenter und fairer Immobilienmakler in Heidelberg — nur 1,5% Provision. Eigentümergeführtes Boutique-Maklerbüro für Heidelberg, Mannheim, Bergstraße, Stuttgart, Frankfurt und Berlin. Künstlerische Exposés, 100% Empfehlungsrate, 3% globaler Purpose.",
+  robots: {
+    index: false,
+    follow: false,
+  },
   keywords: [
     "Immobilienmakler Heidelberg",
     "Immobilien Heidelberg",
