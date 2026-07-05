@@ -241,7 +241,7 @@ function PropertyInquiryForm({ listing, lang }: { listing: Listing; lang: Langua
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder={l.message}
-          className="w-full border border-brand-text/10 bg-transparent p-4 text-brand-text placeholder:text-brand-text/40 focus:outline-none focus:border-brand-accent transition-colors duration-700 font-sans font-medium text-fs-small resize-none leading-relaxed"
+          className="w-full border border-brand-text/10 bg-transparent p-4 text-brand-text placeholder:text-brand-text/40 focus:outline-none focus:border-brand-accent transition-colors duration-700 font-sans font-medium text-fs-small resize-y leading-relaxed"
         />
 
         <div>

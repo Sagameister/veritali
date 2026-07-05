@@ -365,7 +365,7 @@ export function ConsultationForm({
                 disabled={loading}
                 placeholder={t(f.message, lang)}
                 rows={4}
-                className={inputClass}
+                className={`${inputClass} resize-y`}
               />
 
               {/* Service type radio pills */}

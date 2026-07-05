@@ -457,7 +457,7 @@ export default function BewertungPage() {
                         name="message"
                         rows={4}
                         placeholder={t.messageLabel}
-                        className="w-full border border-brand-text/10 bg-transparent p-4 text-brand-text placeholder:text-brand-text/40 focus:outline-none focus:border-brand-accent transition-colors duration-700 font-sans font-medium text-fs-small resize-none"
+                        className="w-full border border-brand-text/10 bg-transparent p-4 text-brand-text placeholder:text-brand-text/40 focus:outline-none focus:border-brand-accent transition-colors duration-700 font-sans font-medium text-fs-small resize-y"
                       />
                     </div>
 
