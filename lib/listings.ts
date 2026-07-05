@@ -83,15 +83,19 @@ function mapPropstackUnitToListing(unit: any): Listing {
   }
 
   const gallery = (unit.images || []).map((img: any) => ({
-    src: img.url,
+    // For slider displays and lightboxes, use the high-quality but compressed big_url (fallback to original url)
+    src: img.big_url || img.url,
     label: {
       de: img.description || img.title || "Ansicht",
       en: img.description || img.title || "View",
     },
   }));
 
+  // For grid thumbnails, use the medium_url (fallback to big_url or original url)
   const mainImage =
+    unit.title_image?.medium_url ||
     unit.title_image?.url ||
+    unit.images?.[0]?.medium_url ||
     gallery[0]?.src ||
     "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop";
 
