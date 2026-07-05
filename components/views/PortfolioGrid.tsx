@@ -152,11 +152,13 @@ export default function PortfolioGrid({
   showHeading = true,
   items = listings,
   variant = "asymmetric",
+  cols = 4,
 }: {
   lang?: Language;
   showHeading?: boolean;
   items?: Listing[];
   variant?: "asymmetric" | "compact";
+  cols?: 3 | 4;
 }) {
   // Chunking for asymmetric grid layout
   const rows: Listing[][] = [];
@@ -164,7 +166,7 @@ export default function PortfolioGrid({
     rows.push(items.slice(i, i + 2));
   }
 
-  // COMPACT VARIANT (4 columns with elegant borders)
+  // COMPACT VARIANT (3 or 4 columns with elegant borders)
   if (variant === "compact") {
     return (
       <section id="portfolio" className="py-16 px-6 md:px-12 bg-brand-bg">
@@ -179,7 +181,7 @@ export default function PortfolioGrid({
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-l border-brand-text/10">
+        <div className={`grid grid-cols-1 sm:grid-cols-2 ${cols === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"} border-t border-l border-brand-text/10`}>
           {items.map((listing) => (
             <div
               key={listing.slug}

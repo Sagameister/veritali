@@ -29,6 +29,15 @@ export default function Home() {
     getListings().then(setItems);
   }, []);
 
+  // Sort available first, then reserved/sold chronologically. Limit to 6.
+  const sortedAndSliced = [...items]
+    .sort((a, b) => {
+      if (a.status === "available" && b.status !== "available") return -1;
+      if (a.status !== "available" && b.status === "available") return 1;
+      return 0;
+    })
+    .slice(0, 6);
+
   return (
     <main>
       <Navigation lang={lang} onLangChange={setLang} />
@@ -36,7 +45,26 @@ export default function Home() {
       <Achievements lang={lang} />
       <Philosophy lang={lang} />
       <Services lang={lang} />
-      <PortfolioGrid lang={lang} items={items} variant="compact" />
+      
+      <div>
+        <PortfolioGrid lang={lang} items={sortedAndSliced} variant="compact" cols={3} />
+        
+        {/* See all listings button */}
+        <div className="flex justify-center bg-brand-bg pb-24">
+          <a
+            href="/objekte"
+            className="group flex items-center gap-6 border border-brand-accent/50 px-8 py-4 hover:border-brand-orange"
+          >
+            <span className="font-sans font-bold text-fs-label uppercase tracking-[0.18em] text-brand-accent group-hover:text-brand-orange transition-colors duration-700 ease-editorial">
+              {lang === "de" ? "Alle Objekte ansehen" : "See all listings"}
+            </span>
+            <span className="text-brand-accent transition-transform duration-700 ease-editorial group-hover:translate-x-1">
+              →
+            </span>
+          </a>
+        </div>
+      </div>
+
       <ClientStories lang={lang} />
       <Gateways lang={lang} />
       <Footer lang={lang} />
