@@ -167,8 +167,8 @@ export default function ListingDetail({
       {/* ---- 4 + 5. Facts table + editorial body ---- */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 px-6 md:px-12 py-24">
         {/* Facts (sticky on desktop so it follows while you read) */}
-        <Reveal className="lg:col-span-4">
-          <div className="lg:sticky lg:top-28">
+        <div className="lg:col-span-4 lg:sticky lg:top-28 self-start">
+          <Reveal>
             <FactRow label={factLabels.object} value={listing.slug.replace(/-/g, " ")} />
             <FactRow label={factLabels.location} value={listing.location} />
             <FactRow label={factLabels.parameters} value={listing.parameters} />
@@ -186,8 +186,8 @@ export default function ListingDetail({
                 +
               </span>
             </a>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
 
         {/* Editorial body */}
         <div className="lg:col-span-7 lg:col-start-6">
