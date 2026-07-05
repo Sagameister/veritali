@@ -887,11 +887,6 @@ export const footerContent = {
         { label: { de: "Objekte", en: "Portfolio" }, href: "/objekte" },
         { label: { de: "Leistungen", en: "Services" }, href: "/services" },
         { label: { de: "Unternehmen", en: "Company" }, href: "/unternehmen" },
-      ],
-    },
-    {
-      heading: { de: "Purpose", en: "Purpose" },
-      links: [
         { label: { de: "Hilfsprojekte", en: "Aid Projects" }, href: "/hilfsprojekte" },
       ],
     },
