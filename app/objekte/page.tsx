@@ -14,6 +14,7 @@ import PortfolioGrid from "../../components/views/PortfolioGrid";
 export default function Objekte() {
   const [lang, setLang] = useState<Language>("de"); // German default
   const [items, setItems] = useState<Listing[]>([]);
+  const [visibleCount, setVisibleCount] = useState(12); // display 12 cards (3 rows) initially
 
   useEffect(() => {
     getListings().then(setItems);
@@ -25,6 +26,9 @@ export default function Objekte() {
     if (a.status !== "available" && b.status === "available") return 1;
     return 0;
   });
+
+  const visibleItems = sorted.slice(0, visibleCount);
+  const hasMore = visibleCount < sorted.length;
 
   return (
     <main>
@@ -53,7 +57,24 @@ export default function Objekte() {
         </header>
 
         {/* ---- 2. Unified Grid Grid (Available first, then Reserved/Sold) ---- */}
-        <PortfolioGrid lang={lang} showHeading={false} items={sorted} variant="compact" />
+        <PortfolioGrid lang={lang} showHeading={false} items={visibleItems} variant="compact" />
+
+        {/* ---- 3. Conditional Load More Button ---- */}
+        {hasMore && (
+          <div className="flex justify-center mt-12">
+            <button
+              onClick={() => setVisibleCount((prev) => prev + 12)}
+              className="group flex items-center gap-6 border border-brand-accent/50 px-8 py-4 hover:border-brand-orange cursor-pointer"
+            >
+              <span className="font-sans font-bold text-fs-label uppercase tracking-[0.18em] text-brand-accent group-hover:text-brand-orange transition-colors duration-700 ease-editorial">
+                {lang === "de" ? "Mehr laden" : "Load more"}
+              </span>
+              <span className="text-brand-accent transition-transform duration-700 ease-editorial group-hover:translate-x-1">
+                +
+              </span>
+            </button>
+          </div>
+        )}
       </div>
 
       <Footer lang={lang} />
