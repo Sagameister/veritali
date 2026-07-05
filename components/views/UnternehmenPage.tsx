@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import SplitText from "../shared/SplitText";
 import ArrowIcon from "../shared/ArrowIcon";
 import ClipPathReveal from "../shared/ClipPathReveal";
 import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
+import { Marquee, ConsultationForm } from "./ServicesPage";
 import Counter from "../shared/Counter";
 import type { Language } from "../../types";
 
@@ -152,21 +152,6 @@ export default function UnternehmenPage({ lang = "de" }: { lang?: Language }) {
   const prefersReduced = usePrefersReducedMotion();
   const [ref, inView] = useInView({ triggerOnce: true, rootMargin: "-15% 0px" });
 
-  const [activeImage, setActiveImage] = useState<string | null>(null);
-
-  // Motion values for tracking cursor position
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  // Smooth spring physics with soft lag
-  const springX = useSpring(mouseX, { stiffness: 150, damping: 22 });
-  const springY = useSpring(mouseY, { stiffness: 150, damping: 22 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    mouseX.set(e.clientX);
-    mouseY.set(e.clientY);
-  };
-
   const containerVariants = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.1 } },
@@ -180,7 +165,7 @@ export default function UnternehmenPage({ lang = "de" }: { lang?: Language }) {
   const show = prefersReduced || inView;
 
   return (
-    <div className="bg-brand-bg text-brand-text relative" onMouseMove={handleMouseMove}>
+    <div className="bg-brand-bg text-brand-text">
       {/* ---- 1. Header (Wahrheit) ---- */}
       <header className="pt-40 pb-20 px-6 md:px-12">
         <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-text/60 mb-4 animate-fade-in">
@@ -362,64 +347,11 @@ export default function UnternehmenPage({ lang = "de" }: { lang?: Language }) {
         </div>
       </section>
 
-      {/* ---- 6. Closing CTA ---- */}
-      <div className="bg-brand-lightbg text-[#1E2229]">
-        <section className="px-6 md:px-12 pb-28">
-          <a
-            href="/kontakt"
-            className="group flex items-center justify-between border-t border-b border-[#1E2229]/15 py-10 hover:border-brand-orange transition-colors duration-700 ease-editorial"
-            onMouseEnter={() => !prefersReduced && setActiveImage(HOUSE_IMAGE)}
-            onMouseLeave={() => !prefersReduced && setActiveImage(null)}
-          >
-            <span className="inline-block translate-y-[0.1em] font-display font-medium text-fs-h2-m md:text-fs-h1 leading-none text-[#1E2229] group-hover:text-brand-orange transition-colors duration-700 ease-editorial">
-              <span className="hover-mask-reveal">
-                <span className="text-primary">
-                  {lang === "de" ? "Lassen Sie uns sprechen" : "Let us start a conversation"}
-                </span>
-                <span className="text-secondary" aria-hidden="true">
-                  {lang === "de" ? "Lassen Sie uns sprechen" : "Let us start a conversation"}
-                </span>
-              </span>
-            </span>
-            <span className="flex items-center shrink-0 text-brand-orange">
-              <span className="hover-icon-reveal">
-                <span className="icon-primary">
-                  <ArrowIcon className="w-8 h-8 md:w-10 md:h-10" />
-                </span>
-                <span className="icon-secondary" aria-hidden="true">
-                  <ArrowIcon className="w-8 h-8 md:w-10 md:h-10" />
-                </span>
-              </span>
-            </span>
-          </a>
-        </section>
+      {/* ---- 6. Marquee & Consultation Form (Dark background contact section) ---- */}
+      <div className="bg-brand-bg text-brand-text border-t border-brand-text/10 pt-12">
+        <Marquee lang={lang} />
+        <ConsultationForm lang={lang} />
       </div>
-
-      {/* Floating magnetic cursor-following preview card */}
-      {!prefersReduced && (
-        <motion.div
-          style={{
-            x: springX,
-            y: springY,
-            pointerEvents: "none",
-          }}
-          animate={{
-            opacity: activeImage ? 1 : 0,
-            scale: activeImage ? 1 : 0.8,
-          }}
-          transition={{ duration: 0.4, ease: EASE }}
-          className="fixed top-0 left-0 z-50 w-64 h-40 overflow-hidden pointer-events-none rounded-sm border border-[#1E2229]/10 shadow-2xl hidden lg:block bg-brand-lightbg ml-5 -translate-y-1/2"
-        >
-          {activeImage && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={activeImage}
-              alt="Preview"
-              className="w-full h-full object-cover"
-            />
-          )}
-        </motion.div>
-      )}
     </div>
   );
 }
