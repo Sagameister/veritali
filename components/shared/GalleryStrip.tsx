@@ -114,7 +114,9 @@ export default function GalleryStrip({
             aria-label="Zurück scrollen"
             className="absolute left-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-brand-accent/55 bg-brand-bg/90 backdrop-blur-md flex items-center justify-center text-brand-accent hover:border-brand-orange hover:text-brand-orange transition-colors duration-300 shadow-xl cursor-pointer"
           >
-            <span className="font-sans text-2xl font-bold leading-none -translate-x-[1px]">‹</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
           </button>
         )}
 
@@ -157,7 +159,9 @@ export default function GalleryStrip({
             aria-label="Weiter scrollen"
             className="absolute right-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-brand-accent/55 bg-brand-bg/90 backdrop-blur-md flex items-center justify-center text-brand-accent hover:border-brand-orange hover:text-brand-orange transition-colors duration-300 shadow-xl cursor-pointer"
           >
-            <span className="font-sans text-2xl font-bold leading-none translate-x-[1px]">›</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
           </button>
         )}
       </div>
