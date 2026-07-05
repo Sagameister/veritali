@@ -187,7 +187,7 @@ export default function Footer({ lang = DEFAULT_LANGUAGE }: { lang?: Language })
           href="/hilfsprojekte"
           className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-green hover:text-brand-orange"
         >
-          3% → VERITA-Schulprojekt im Kongo
+          3% → VERITALI-Schulprojekt im Kongo
         </a>
       </div>
     </footer>
