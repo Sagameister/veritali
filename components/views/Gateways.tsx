@@ -78,7 +78,7 @@ function GatewayText({
         <p className="font-sans font-medium text-fs-small md:text-fs-body-m text-brand-muted leading-relaxed mb-8">
           {t(gateway.body, lang)}
         </p>
-        <CtaBar label={t(gateway.cta, lang)} href="#contact" />
+        <CtaBar label={t(gateway.cta, lang)} href={gateway.href} />
         {gateway.subLabel && (
           <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-text/60 mt-6">
             {t(gateway.subLabel, lang)}

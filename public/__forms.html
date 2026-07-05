@@ -6,6 +6,8 @@
 </head>
 <body>
   <!-- This static file is required for Netlify to register forms in Next.js v5 Runtime. -->
+  
+  <!-- Form 1: General Contact / Consultation -->
   <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field">
     <input type="text" name="name" />
     <input type="text" name="location" />
@@ -13,6 +15,41 @@
     <input type="email" name="email" />
     <textarea name="message"></textarea>
     <input type="text" name="serviceType" />
+    <input type="checkbox" name="consent" />
+  </form>
+
+  <!-- Form 2: Property Valuation (Immobilienbewertung) -->
+  <form name="valuation" data-netlify="true" data-netlify-honeypot="bot-field">
+    <!-- Section 1: Customer Info -->
+    <input type="text" name="anrede" />
+    <input type="text" name="name" />
+    <input type="text" name="street" />
+    <input type="text" name="zip" />
+    <input type="text" name="city" />
+    <input type="text" name="phone" />
+    <input type="email" name="email" />
+    <input type="checkbox" name="requestValuation" />
+
+    <!-- Section 2: Property Address -->
+    <input type="text" name="propStreet" />
+    <input type="text" name="propZip" />
+    <input type="text" name="propCity" />
+
+    <!-- Section 3: Property Type -->
+    <input type="text" name="propertyType" />
+
+    <!-- Section 4: Details -->
+    <input type="text" name="buildYear" />
+    <input type="text" name="rooms" />
+    <input type="text" name="bathrooms" />
+    <input type="text" name="livingArea" />
+    <input type="text" name="plotSize" />
+
+    <!-- Section 5: Current Status -->
+    <input type="text" name="propertyStatus" />
+
+    <!-- Section 6: Note & Consent -->
+    <textarea name="message"></textarea>
     <input type="checkbox" name="consent" />
   </form>
 </body>

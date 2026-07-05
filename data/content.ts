@@ -846,6 +846,7 @@ export const valuationGateway: Gateway = {
   },
   image:
     "https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=1800&auto=format&fit=crop",
+  href: "/bewertung",
 };
 
 export const consultationGateway: Gateway = {
@@ -861,6 +862,7 @@ export const consultationGateway: Gateway = {
   },
   image:
     "https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=1800&auto=format&fit=crop",
+  href: "/kontakt",
 };
 
 // ---------------------------------------------------------------------------

@@ -94,4 +94,5 @@ export interface Gateway {
   cta: Bilingual;
   subLabel?: Bilingual;
   image: string; // the photo paired with this text block (checkerboard layout)
+  href: string; // link destination, e.g. "/bewertung" or "/kontakt"
 }
