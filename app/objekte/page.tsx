@@ -85,7 +85,7 @@ export default function Objekte() {
         {archive.length > 0 && (
           <section className="px-6 md:px-12 pb-28">
             <DividerLine />
-            <div className="flex items-baseline justify-between gap-6 pt-16">
+            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 md:gap-6 pt-16">
               <h2 className="font-display font-medium text-fs-h1-m md:text-fs-h1 text-brand-text">
                 <SplitText text={lang === "de" ? "Referenzen" : "References"} />
               </h2>
