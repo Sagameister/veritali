@@ -124,7 +124,7 @@ function CompactListingCard({ listing, lang }: { listing: Listing; lang: Languag
             <p className="font-sans font-medium text-[11px] uppercase tracking-[0.18em] text-brand-green">
               {t(listing.category, lang)}
             </p>
-            <h3 className="font-display font-medium text-lg md:text-xl text-brand-text transition-colors duration-700 ease-editorial group-hover:text-brand-orange leading-snug line-clamp-2 min-h-[3.2em]">
+            <h3 className="font-display font-medium text-lg md:text-xl text-brand-text transition-colors duration-700 ease-editorial group-hover:text-brand-orange leading-snug line-clamp-3 min-h-[4.8em]">
               {t(listing.title, lang)} <span className="text-brand-accent">+</span>
             </h3>
             <p className="font-sans font-medium text-xs md:text-sm text-brand-text/75">
