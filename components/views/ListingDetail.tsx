@@ -83,17 +83,17 @@ function RelatedCard({ listing, lang }: { listing: Listing; lang: Language }) {
         </div>
         
         {/* Meta text */}
-        <div className="space-y-1.5">
-          <p className="font-sans font-medium text-[10px] uppercase tracking-[0.18em] text-brand-green">
+        <div className="space-y-2">
+          <p className="font-sans font-medium text-[11px] uppercase tracking-[0.18em] text-brand-green">
             {t(listing.category, lang)}
           </p>
-          <h3 className="font-display font-medium text-base md:text-lg text-brand-text transition-colors duration-700 ease-editorial group-hover:text-brand-orange leading-snug line-clamp-2 min-h-[3.2em]">
+          <h3 className="font-display font-medium text-lg md:text-xl text-brand-text transition-colors duration-700 ease-editorial group-hover:text-brand-orange leading-snug line-clamp-2 min-h-[3.2em]">
             {t(listing.title, lang)} <span className="text-brand-accent">+</span>
           </h3>
-          <p className="font-sans font-medium text-[11px] text-brand-text/50">
+          <p className="font-sans font-medium text-xs md:text-sm text-brand-text/75">
             {listing.location} — {listing.year}
           </p>
-          <p className="font-sans font-medium text-[11px] text-brand-muted">
+          <p className="font-sans font-medium text-xs md:text-sm text-brand-text/80">
             {listing.parameters}
           </p>
         </div>
@@ -101,7 +101,7 @@ function RelatedCard({ listing, lang }: { listing: Listing; lang: Language }) {
 
       {/* Price at the bottom */}
       <div className="pt-4 mt-auto">
-        <p className="font-display font-medium text-base text-brand-accent">
+        <p className="font-display font-medium text-xl md:text-2xl text-brand-accent">
           {listing.price}
         </p>
       </div>
