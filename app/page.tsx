@@ -36,7 +36,7 @@ export default function Home() {
       <Achievements lang={lang} />
       <Philosophy lang={lang} />
       <Services lang={lang} />
-      <PortfolioGrid lang={lang} items={items} />
+      <PortfolioGrid lang={lang} items={items} variant="compact" />
       <ClientStories lang={lang} />
       <Gateways lang={lang} />
       <Footer lang={lang} />
