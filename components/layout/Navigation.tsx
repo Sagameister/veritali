@@ -26,7 +26,7 @@ interface NavigationProps {
   onLangChange?: (lang: Language) => void;
 }
 
-// Small reusable DE/EN toggle. Active language = brass; inactive = subdued.
+// Space-saving dropdown language switcher. Shows active lang; click to open menu.
 function LanguageSwitcher({
   lang,
   onLangChange,
@@ -34,24 +34,53 @@ function LanguageSwitcher({
   lang: Language;
   onLangChange?: (lang: Language) => void;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleOutsideClick = () => setIsOpen(false);
+    window.addEventListener("click", handleOutsideClick);
+    return () => window.removeEventListener("click", handleOutsideClick);
+  }, [isOpen]);
+
   return (
-    <div className="flex items-center gap-2" aria-label="Sprache / Language">
-      {(["de", "en"] as Language[]).map((code, idx) => (
-        <span key={code} className="flex items-center gap-2">
-          {idx > 0 && <span className="text-brand-text/30 text-xs">/</span>}
-          <button
-            onClick={() => onLangChange?.(code)}
-            aria-pressed={lang === code}
-            className={`font-sans font-bold text-fs-label uppercase tracking-[0.18em] ${
-              lang === code
-                ? "text-brand-accent"
-                : "text-brand-text/50 hover:text-brand-orange"
-            }`}
-          >
-            {code.toUpperCase()}
-          </button>
-        </span>
-      ))}
+    <div className="relative inline-block text-left" aria-label="Sprache / Language">
+      <button
+        onClick={toggleMenu}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+        className="flex items-center gap-1.5 font-sans font-bold text-fs-label uppercase tracking-[0.18em] text-brand-accent hover:text-brand-orange transition-colors duration-300 cursor-pointer"
+      >
+        {lang.toUpperCase()}
+        <span className="text-[8px] opacity-60 translate-y-[0.5px]">▼</span>
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-3 w-24 bg-brand-surface border border-brand-text/10 shadow-2xl z-50 backdrop-blur-md">
+          <div className="py-1">
+            {(["de", "en"] as Language[])
+              .filter((code) => code !== lang)
+              .map((code) => (
+                <button
+                  key={code}
+                  onClick={() => {
+                    onLangChange?.(code);
+                    setIsOpen(false);
+                  }}
+                  className="block w-full text-left px-4 py-2.5 font-sans font-bold text-fs-label uppercase tracking-[0.18em] text-brand-text/70 hover:text-brand-orange hover:bg-brand-bg/50 transition-colors duration-300 cursor-pointer"
+                >
+                  {code.toUpperCase()}
+                </button>
+              ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
