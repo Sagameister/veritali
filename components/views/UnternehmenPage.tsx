@@ -13,8 +13,7 @@ import type { Language } from "../../types";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 // Curated high-end editorial placeholders
-const PORTRAIT_IMAGE =
-  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1200&auto=format&fit=crop";
+const PORTRAIT_IMAGE = "/images/Vee.webp";
 const HOUSE_IMAGE =
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop";
 
