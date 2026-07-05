@@ -152,7 +152,7 @@ export default function ListingDetail({
 
       <div className="relative overflow-hidden w-full aspect-[16/8] bg-brand-surface">
         <motion.img
-          src={listing.image}
+          src={listing.heroImage || listing.image}
           alt={t(listing.title, lang)}
           style={{ y: yHero }}
           className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover pointer-events-none select-none"

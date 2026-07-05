@@ -58,7 +58,8 @@ export interface Listing {
   parameters: string;
   price: string;
   summary: Bilingual;
-  image: string; // placeholder photo URL
+  image: string; // placeholder photo URL (medium resolution for thumbnails)
+  heroImage?: string; // high-resolution photo URL for detail page hero
   gallery: GalleryImage[]; // detail-page photos, each with a room label
   size: "large" | "small"; // drives the asymmetric masonry layout
   detail: {

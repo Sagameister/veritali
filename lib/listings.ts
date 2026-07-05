@@ -99,6 +99,14 @@ function mapPropstackUnitToListing(unit: any): Listing {
     gallery[0]?.src ||
     "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop";
 
+  // For high-resolution hero banners, use the original url (fallback to big_url)
+  const heroImage =
+    unit.title_image?.url ||
+    unit.title_image?.big_url ||
+    unit.images?.[0]?.url ||
+    gallery[0]?.src ||
+    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop";
+
   const yearVal = typeof unit.construction_year === "object" ? unit.construction_year?.value : unit.construction_year;
   const year = yearVal ? String(yearVal) : "2026";
 
@@ -121,6 +129,7 @@ function mapPropstackUnitToListing(unit: any): Listing {
       en: descEn.substring(0, 180) + (descEn.length > 180 ? "..." : ""),
     },
     image: mainImage,
+    heroImage,
     gallery,
     size: "large",
     detail: {
