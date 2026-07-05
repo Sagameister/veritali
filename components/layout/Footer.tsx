@@ -11,14 +11,34 @@ import type { Language } from "../../types";
 export default function Footer({ lang = DEFAULT_LANGUAGE }: { lang?: Language }) {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (!email) return;
+
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to subscribe");
+      }
+
       setSubscribed(true);
       setEmail("");
-      // Clear message after 5 seconds
-      setTimeout(() => setSubscribed(false), 5000);
+    } catch (err) {
+      console.error(err);
+      setErrorMsg(lang === "de" ? "Fehler beim Eintragen." : "Failed to subscribe.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,19 +128,27 @@ export default function Footer({ lang = DEFAULT_LANGUAGE }: { lang?: Language })
               <input
                 type="email"
                 required
+                disabled={loading}
                 placeholder={lang === "de" ? "E-Mail-Adresse" : "Email address"}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-transparent py-2 w-full text-fs-small font-sans focus:outline-none placeholder:text-brand-muted/70 text-brand-text pr-10"
+                className="bg-transparent py-2 w-full text-fs-small font-sans focus:outline-none placeholder:text-brand-muted/70 text-brand-text pr-10 disabled:opacity-50"
               />
               <button
                 type="submit"
-                className="absolute right-0 top-1/2 -translate-y-1/2 text-brand-accent hover:text-brand-orange text-lg font-bold cursor-pointer"
+                disabled={loading}
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-brand-accent hover:text-brand-orange text-lg font-bold cursor-pointer disabled:opacity-50"
                 aria-label="Abonnieren"
               >
-                →
+                {loading ? "..." : "→"}
               </button>
             </form>
+          )}
+
+          {errorMsg && (
+            <p className="mt-2 font-sans font-medium text-xs text-brand-orange">
+              {errorMsg}
+            </p>
           )}
         </div>
       </div>
