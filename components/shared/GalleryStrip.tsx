@@ -1,31 +1,20 @@
 "use client";
 
-// Object photo gallery: horizontal scroll-lock strip + lightbox.
+// Object photo gallery: horizontal slider + manual navigation + lightbox.
 //
-// DESKTOP: when the gallery reaches the top of the screen, GSAP "pins" it
-// and converts vertical scrolling into a sideways sweep through the photos.
-// A round "SCROLL" badge glides after the cursor as a hint.
-// Each photo carries a ROOM LABEL badge (bottom-right, dark panel) —
-// the label data lives in data/content.ts and will come from the CMS later.
+// DESKTOP: a horizontal flex container showing multiple large images at a time.
+// Navigation is done via manual left (‹) and right (›) arrows.
 // MOBILE: a simple vertical stack.
-// CLICK any photo → LIGHTBOX. Next/prev uses a zoom-crossfade:
-// the outgoing photo shrinks and fades away while the incoming one
-// grows from slightly small up to full size — both at the same time.
+// CLICK any photo → LIGHTBOX. Next/prev uses a zoom-crossfade.
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
+import { motion, AnimatePresence } from "framer-motion";
 import type { GalleryImage, Language } from "../../types";
 import { DEFAULT_LANGUAGE } from "../../data/content";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-// Room label badge — dark brand panel, light text (CMS-driven later).
+// Room label badge — dark brand panel, light text
 function RoomBadge({ label }: { label: string }) {
   return (
     <span className="absolute bottom-4 right-4 bg-brand-bg/90 backdrop-blur-sm px-3.5 py-2 font-sans font-medium text-xs text-brand-text pointer-events-none">
@@ -43,53 +32,36 @@ export default function GalleryStrip({
   alt: string;
   lang?: Language;
 }) {
-  const containerRef = useRef<HTMLDivElement>(null); // pinned section
   const scrollRef = useRef<HTMLDivElement>(null); // sliding row
-  const prefersReduced = usePrefersReducedMotion();
-
-  // Which photo the lightbox shows (null = closed).
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  /* ---- "Scroll" cursor badge (desktop) ---- */
-  const [cursorVisible, setCursorVisible] = useState(false);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const badgeX = useSpring(mouseX, { stiffness: 150, damping: 25, mass: 0.4 });
-  const badgeY = useSpring(mouseY, { stiffness: 150, damping: 25, mass: 0.4 });
+  // Track if we can scroll left/right to show/hide arrows
+  const [scrollState, setScrollState] = useState({ isStart: true, isEnd: false });
 
-  const onMouseMove = (e: React.MouseEvent) => {
-    mouseX.set(e.clientX);
-    mouseY.set(e.clientY);
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setScrollState({
+        isStart: scrollLeft <= 15,
+        isEnd: scrollLeft + clientWidth >= scrollWidth - 15,
+      });
+    }
   };
 
-  /* ---- Horizontal scroll-lock (desktop only) ---- */
-  useGSAP(
-    () => {
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const isMobile = window.innerWidth < 768;
-      if (reduced || isMobile || !scrollRef.current) return;
+  // Run scroll state check on mount and window resize
+  useEffect(() => {
+    handleScroll();
+    window.addEventListener("resize", handleScroll);
+    return () => window.removeEventListener("resize", handleScroll);
+  }, [images]);
 
-      gsap.to(scrollRef.current, {
-        x: () => {
-          if (!scrollRef.current) return 0;
-          return -(scrollRef.current.scrollWidth - window.innerWidth);
-        },
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          pin: true,
-          scrub: 1,
-          start: "top top",
-          end: () => {
-            if (!scrollRef.current) return "+=0";
-            return `+=${scrollRef.current.scrollWidth - window.innerWidth}`;
-          },
-          invalidateOnRefresh: true,
-        },
-      });
-    },
-    { scope: containerRef }
-  );
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      // Scroll by 600px smoothly
+      const offset = direction === "left" ? -600 : 600;
+      scrollRef.current.scrollBy({ left: offset, behavior: "smooth" });
+    }
+  };
 
   /* ---- Lightbox keyboard controls + scroll lock ---- */
   useEffect(() => {
@@ -126,7 +98,6 @@ export default function GalleryStrip({
             <img
               src={img.src}
               alt={`${alt} — ${img.label[lang]}`}
-              onLoad={() => ScrollTrigger.refresh()}
               className="w-full aspect-[4/3] object-cover"
             />
             <RoomBadge label={img.label[lang]} />
@@ -134,15 +105,26 @@ export default function GalleryStrip({
         ))}
       </div>
 
-      {/* ---- DESKTOP: pinned horizontal strip ---- */}
-      <div
-        ref={containerRef}
-        onMouseMove={onMouseMove}
-        onMouseEnter={() => setCursorVisible(true)}
-        onMouseLeave={() => setCursorVisible(false)}
-        className="hidden md:block relative w-full h-screen overflow-hidden bg-brand-bg cursor-none"
-      >
-        <div ref={scrollRef} className="flex h-full w-max items-center gap-8 pl-12 pr-48">
+      {/* ---- DESKTOP: horizontal slider with manual navigation ---- */}
+      <div className="hidden md:block relative w-full px-6 md:px-12 py-12 bg-brand-bg group/gallery select-none">
+        {/* Left Arrow */}
+        {!scrollState.isStart && (
+          <button
+            onClick={() => scroll("left")}
+            aria-label="Zurück scrollen"
+            className="absolute left-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-brand-text/20 bg-brand-bg/85 backdrop-blur-md flex items-center justify-center text-brand-text hover:border-brand-orange hover:text-brand-orange transition-colors duration-300 shadow-lg cursor-pointer"
+          >
+            <span className="font-sans text-xl leading-none -translate-x-[1px]">‹</span>
+          </button>
+        )}
+
+        {/* Slider container */}
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="flex gap-6 overflow-x-auto scrollbar-none scroll-smooth pb-4 px-2"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
           {images.map((img, idx) => (
             <button
               key={idx}
@@ -150,46 +132,35 @@ export default function GalleryStrip({
                 if (e.detail > 0) e.currentTarget.blur();
                 setLightbox(idx);
               }}
-              className="group relative h-[72vh] flex-shrink-0 cursor-none overflow-hidden focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent"
+              className="group relative h-[480px] aspect-[3/2] flex-shrink-0 overflow-hidden focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent"
               aria-label={`${alt} — ${img.label[lang]}`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={img.src}
                 alt={`${alt} — ${img.label[lang]}`}
-                onLoad={() => ScrollTrigger.refresh()}
-                className="h-full w-auto object-cover transition-transform duration-1000 ease-editorial group-hover:scale-[1.03]"
+                className="w-full h-full object-cover transition-transform duration-1000 ease-editorial group-hover:scale-[1.03]"
               />
               {/* Photo counter (bottom-left) + room label (bottom-right) */}
-              <span className="absolute bottom-4 left-4 font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-text/70">
+              <span className="absolute bottom-4 left-4 font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-text/70 bg-brand-bg/50 px-2 py-1 rounded-sm">
                 0{idx + 1} / 0{images.length}
               </span>
               <RoomBadge label={img.label[lang]} />
             </button>
           ))}
         </div>
-      </div>
 
-      {/* ---- "SCROLL" cursor badge ---- */}
-      <AnimatePresence>
-        {cursorVisible && lightbox === null && !prefersReduced && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.4, ease: EASE }}
-            style={{ x: badgeX, y: badgeY }}
-            className="fixed top-0 left-0 z-50 pointer-events-none hidden md:block"
-            aria-hidden="true"
+        {/* Right Arrow */}
+        {!scrollState.isEnd && (
+          <button
+            onClick={() => scroll("right")}
+            aria-label="Weiter scrollen"
+            className="absolute right-16 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-brand-text/20 bg-brand-bg/85 backdrop-blur-md flex items-center justify-center text-brand-text hover:border-brand-orange hover:text-brand-orange transition-colors duration-300 shadow-lg cursor-pointer"
           >
-            <div className="-translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-brand-accent flex items-center justify-center">
-              <span className="font-sans font-medium text-[10px] uppercase tracking-[0.18em] text-brand-bg">
-                Scroll
-              </span>
-            </div>
-          </motion.div>
+            <span className="font-sans text-xl leading-none translate-x-[1px]">›</span>
+          </button>
         )}
-      </AnimatePresence>
+      </div>
 
       {/* ---- LIGHTBOX ---- */}
       <AnimatePresence>
@@ -205,15 +176,6 @@ export default function GalleryStrip({
             aria-modal="true"
             aria-label={alt}
           >
-            {/* Photo stage. Images are absolutely stacked so the outgoing
-                and incoming photo overlap during the zoom-crossfade:
-                  leaving  → shrinks to 88% while fading out
-                  entering → grows from 88% up to 100% while fading in
-                Both run simultaneously on the soft-deceleration curve.
-
-                SWIPE: the photo is horizontally draggable (touch or mouse).
-                A swipe past ~80px — or a quick flick — advances to the
-                next/previous photo; a small drag just springs back. */}
             <div className="absolute inset-0 flex items-center justify-center p-8 md:p-20 overflow-hidden">
               <AnimatePresence initial={false}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -234,9 +196,9 @@ export default function GalleryStrip({
                       setLightbox((lightbox - 1 + images.length) % images.length);
                     }
                   }}
-                  initial={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.88 }}
-                  animate={prefersReduced ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-                  exit={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.88 }}
+                  initial={{ opacity: 0, scale: 0.88 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.88 }}
                   transition={{ duration: 0.65, ease: EASE }}
                   className="absolute max-h-[82vh] max-w-[88vw] object-contain cursor-grab active:cursor-grabbing touch-none"
                 />

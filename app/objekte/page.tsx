@@ -79,13 +79,13 @@ export default function Objekte() {
         </header>
 
         {/* ---- 2. Active listings (always all) ---- */}
-        <PortfolioGrid lang={lang} showHeading={false} items={active} />
+        <PortfolioGrid lang={lang} showHeading={false} items={active} variant="compact" />
 
         {/* ---- 3. Archive with "Mehr laden" batching ---- */}
         {archive.length > 0 && (
           <section className="px-6 md:px-12 pb-28">
             <DividerLine />
-            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 md:gap-6 pt-16">
+            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 md:gap-6 pt-16 mb-12">
               <h2 className="font-display font-medium text-fs-h1-m md:text-fs-h1 text-brand-text">
                 <SplitText text={lang === "de" ? "Referenzen" : "References"} />
               </h2>
@@ -94,7 +94,7 @@ export default function Objekte() {
               </p>
             </div>
 
-            <PortfolioGrid lang={lang} showHeading={false} items={visibleArchive} />
+            <PortfolioGrid lang={lang} showHeading={false} items={visibleArchive} variant="compact" />
 
             {hasMore && (
               <div className="flex justify-center">
