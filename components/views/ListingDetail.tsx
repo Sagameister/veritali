@@ -15,7 +15,7 @@
 //   6. Related object cards at the bottom (the other listings).
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import SplitText from "../shared/SplitText";
 import ScrollHighlightText from "../shared/ScrollHighlightText";
@@ -118,6 +118,10 @@ export default function ListingDetail({
 }) {
   const [related, setRelated] = useState<Listing[]>([]);
 
+  const { scrollY } = useScroll();
+  // Map window scroll of 0px -> 800px to vertical translation of 0px -> 160px
+  const yHero = useTransform(scrollY, [0, 800], [0, 160]);
+
   useEffect(() => {
     getListings().then((allListings) => {
       // Filter out the current listing and take the latest 3
@@ -146,11 +150,14 @@ export default function ListingDetail({
         </h1>
       </header>
 
-      <ClipPathReveal
-        src={listing.image}
-        alt={t(listing.title, lang)}
-        aspectRatioClassName="aspect-[16/8]"
-      />
+      <div className="relative overflow-hidden w-full aspect-[16/8] bg-brand-surface">
+        <motion.img
+          src={listing.image}
+          alt={t(listing.title, lang)}
+          style={{ y: yHero }}
+          className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover pointer-events-none select-none"
+        />
+      </div>
 
       {/* ---- 2. Big statement line ----
           Words brighten one by one as you scroll (reading-cursor effect). */}
