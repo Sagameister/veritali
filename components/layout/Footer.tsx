@@ -4,7 +4,7 @@
 // Deep navy base (slightly darker than the page), brass highlights,
 // tiny uppercase headings, light link lists, and an integrated mailing list form.
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { footerContent, seo, t, DEFAULT_LANGUAGE } from "../../data/content";
 import type { Language } from "../../types";
 
@@ -13,6 +13,12 @@ export default function Footer({ lang = DEFAULT_LANGUAGE }: { lang?: Language })
   const [subscribed, setSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [emailText, setEmailText] = useState("");
+
+  useEffect(() => {
+    // Decode "kontakt@veritali.de" at runtime
+    setEmailText(atob("a29udGFrdEB2ZXJpdGFsaS5kZQ=="));
+  }, []);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,7 +110,16 @@ export default function Footer({ lang = DEFAULT_LANGUAGE }: { lang?: Language })
             {footerContent.contact.phone}
           </p>
           <p className="font-sans font-medium text-fs-small text-brand-muted">
-            {footerContent.contact.email}
+            {emailText ? (
+              <a
+                href={`mailto:${emailText}`}
+                className="hover:text-brand-orange transition-colors duration-300"
+              >
+                {emailText}
+              </a>
+            ) : (
+              <span className="opacity-50">kontakt [at] veritali.de</span>
+            )}
           </p>
         </div>
 

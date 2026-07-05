@@ -13,9 +13,8 @@ import SplitText from "../../components/shared/SplitText";
 import { ConsultationForm } from "../../components/views/ServicesPage";
 import { consultationGateway, t } from "../../data/content";
 
-// PLACEHOLDER portrait — replace with the real photo when available.
-const PORTRAIT_PLACEHOLDER =
-  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop";
+// Official portrait of Dr. Verena Beittinger-Lee
+const PORTRAIT_IMAGE = "/images/Vee.webp";
 
 export default function KontaktPage() {
   const [lang, setLang] = useState<Language>("de"); // German default
@@ -40,8 +39,8 @@ export default function KontaktPage() {
           </p>
         </header>
 
-        {/* ---- Consultation form (no heading) with portrait placeholder ---- */}
-        <ConsultationForm lang={lang} image={PORTRAIT_PLACEHOLDER} showHeading={false} />
+        {/* ---- Consultation form (no heading) with official portrait ---- */}
+        <ConsultationForm lang={lang} image={PORTRAIT_IMAGE} showHeading={false} />
       </div>
 
       <Footer lang={lang} />
