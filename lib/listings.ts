@@ -27,23 +27,32 @@ function formatPrice(value?: number): string {
 
 // Maps Propstack Unit structure to Veritali Listing interface
 function mapPropstackUnitToListing(unit: any): Listing {
-  const titleDe = unit.title || "Immobilie";
+  const titleDe = unit.title?.value || unit.name || "Immobilie";
   const titleEn = unit.custom_fields?.title_en || titleDe;
 
-  const descDe = unit.description_note || "";
+  const descDe = unit.description_note?.value || "";
   const descEn = unit.custom_fields?.description_en || descDe;
 
   const slug = unit.custom_fields?.slug || slugify(titleDe);
 
-  const rooms = unit.rooms ? `${unit.rooms} Zimmer` : "";
-  const space = unit.space?.living_space ? `${Math.round(unit.space.living_space)} m²` : "";
+  const roomsVal = typeof unit.number_of_rooms === "object" ? unit.number_of_rooms?.value : unit.number_of_rooms;
+  const rooms = roomsVal ? `${roomsVal} Zimmer` : "";
+
+  const spaceVal = typeof unit.living_space === "object" ? unit.living_space?.value : unit.living_space;
+  const space = spaceVal ? `${Math.round(spaceVal)} m²` : "";
+
   const paramsArray = [rooms, space].filter(Boolean);
 
   let status: ListingStatus = "available";
-  const statusName = typeof unit.status === "object" ? unit.status.name : unit.status;
-  if (statusName === "reserved") {
+  const statusName = unit.property_status?.name;
+  if (statusName === "Reserviert" || statusName === "reserved") {
     status = "reserved";
-  } else if (statusName === "sold" || statusName === "offline") {
+  } else if (
+    statusName === "Abgeschlossen" ||
+    statusName === "sold" ||
+    statusName === "offline" ||
+    statusName === "Verkauft"
+  ) {
     status = "sold";
   }
 
@@ -54,24 +63,30 @@ function mapPropstackUnitToListing(unit: any): Listing {
       body: { de: descDe, en: descEn },
     });
   }
-  if (unit.location_note) {
+
+  const locDe = unit.location_note?.value || "";
+  const locEn = unit.custom_fields?.location_en || locDe;
+  if (locDe) {
     sections.push({
       title: { de: "Lage", en: "Location" },
-      body: { de: unit.location_note, en: unit.custom_fields?.location_en || unit.location_note },
+      body: { de: locDe, en: locEn },
     });
   }
-  if (unit.furnishing_note) {
+
+  const furnDe = unit.furnishing_note?.value || "";
+  const furnEn = unit.custom_fields?.furnishing_en || furnDe;
+  if (furnDe) {
     sections.push({
       title: { de: "Ausstattung", en: "Furnishing" },
-      body: { de: unit.furnishing_note, en: unit.custom_fields?.furnishing_en || unit.furnishing_note },
+      body: { de: furnDe, en: furnEn },
     });
   }
 
   const gallery = (unit.images || []).map((img: any) => ({
     src: img.url,
     label: {
-      de: img.description || "Ansicht",
-      en: img.description || "View",
+      de: img.description || img.title || "Ansicht",
+      en: img.description || img.title || "View",
     },
   }));
 
@@ -79,6 +94,11 @@ function mapPropstackUnitToListing(unit: any): Listing {
     unit.title_image?.url ||
     gallery[0]?.src ||
     "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop";
+
+  const yearVal = typeof unit.construction_year === "object" ? unit.construction_year?.value : unit.construction_year;
+  const year = yearVal ? String(yearVal) : "2026";
+
+  const priceVal = typeof unit.price === "object" ? unit.price?.value : unit.price;
 
   return {
     slug,
@@ -89,9 +109,9 @@ function mapPropstackUnitToListing(unit: any): Listing {
     },
     title: { de: titleDe, en: titleEn },
     location: unit.city ? `${unit.city}${unit.zip_code ? `, ${unit.zip_code}` : ""}` : "Baden-Württemberg",
-    year: unit.construction_year ? String(unit.construction_year) : "2026",
+    year,
     parameters: paramsArray.join(" | ") || "Studio Mandat",
-    price: formatPrice(unit.price?.value),
+    price: formatPrice(priceVal),
     summary: {
       de: descDe.substring(0, 180) + (descDe.length > 180 ? "..." : ""),
       en: descEn.substring(0, 180) + (descEn.length > 180 ? "..." : ""),
