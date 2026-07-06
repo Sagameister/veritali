@@ -53,12 +53,14 @@ export default function Footer({ lang = DEFAULT_LANGUAGE }: { lang?: Language })
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
         {/* Brand column */}
         <div className="md:col-span-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/veritali-logo-white.svg"
-            alt="Veritali"
-            className="h-11 w-auto mb-4"
-          />
+          <a href="/" aria-label="Veritali — Startseite" className="inline-block mb-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/veritali-logo-white.svg"
+              alt="Veritali"
+              className="h-8 md:h-10 w-auto"
+            />
+          </a>
           <p className="font-sans font-medium text-fs-small text-brand-muted max-w-sm">
             {t(footerContent.tagline, lang)}
           </p>

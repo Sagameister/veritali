@@ -117,14 +117,14 @@ export default function Navigation({
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <nav className="flex items-center justify-between px-6 md:px-12 h-20">
+      <nav className="flex items-center justify-between px-6 md:px-12 h-16 md:h-20">
         {/* Brand logo (SVG wordmark) */}
         <a href="/" aria-label="Veritali — Startseite">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/veritali-logo-white.svg"
             alt="Veritali"
-            className="h-9 w-auto"
+            className="h-7 md:h-9 w-auto"
           />
         </a>
 
