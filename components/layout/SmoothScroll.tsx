@@ -6,6 +6,7 @@
 // It is initialized ONCE here and never again in any component.
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "@studio-freight/lenis";
 
 export default function SmoothScroll({
@@ -14,8 +15,14 @@ export default function SmoothScroll({
   children: React.ReactNode;
 }) {
   const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // Disable smooth scroll hijacking inside Sanity Studio editor dashboard
+    if (pathname?.startsWith("/studio")) {
+      return;
+    }
+
     // Accessibility: users who prefer reduced motion get native scrolling.
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -44,7 +51,7 @@ export default function SmoothScroll({
     return () => {
       lenis.destroy(); // clean up when the app unmounts
     };
-  }, []);
+  }, [pathname]);
 
   return <>{children}</>;
 }
