@@ -67,6 +67,21 @@ export default function NewsDetail({
 
   const paragraphs = t(article.body, lang).split("\n\n");
 
+  // Pre-scan paragraphs to collect which gallery images are rendered inline
+  const inlineImageIndexes = new Set<number>();
+  paragraphs.forEach((p) => {
+    const trimmed = p.trim();
+    const imageMatch = trimmed.match(/^\[image:\s*(\d+)\]$/);
+    if (imageMatch) {
+      const imageIdx = parseInt(imageMatch[1], 10);
+      if (article.gallery && article.gallery[imageIdx]) {
+        inlineImageIndexes.add(imageIdx);
+      }
+    }
+  });
+
+  const bottomGallery = (article.gallery || []).filter((_, idx) => !inlineImageIndexes.has(idx));
+
   return (
     <div className="bg-brand-bg min-h-screen pt-40 pb-20">
       {/* Editorial Main Container */}
@@ -114,6 +129,39 @@ export default function NewsDetail({
           <div className="max-w-2xl">
             {paragraphs.map((p, idx) => {
               const trimmed = p.trim();
+              
+              // Check if paragraph is an inline image placeholder like [image: 0]
+              const imageMatch = trimmed.match(/^\[image:\s*(\d+)\]$/);
+              if (imageMatch) {
+                const imageIdx = parseInt(imageMatch[1], 10);
+                const img = article.gallery && article.gallery[imageIdx];
+                if (img) {
+                  return (
+                    <motion.figure
+                      key={idx}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, ease: EASE, delay: idx * 0.08 }}
+                      className="my-12 flex flex-col"
+                    >
+                      <div className="aspect-[16/10] w-full overflow-hidden bg-brand-surface mb-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={img.src}
+                          alt={img.caption ? t(img.caption, lang) : `Article Image`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {img.caption && (
+                        <figcaption className="font-sans font-medium text-xs text-brand-muted leading-relaxed">
+                          {t(img.caption, lang)}
+                        </figcaption>
+                      )}
+                    </motion.figure>
+                  );
+                }
+              }
+
               if (trimmed.startsWith("## ")) {
                 return (
                   <motion.h2
@@ -154,13 +202,13 @@ export default function NewsDetail({
             })}
 
             {/* Gallery images inside the article */}
-            {article.gallery && article.gallery.length > 0 && (
+            {bottomGallery.length > 0 && (
               <div className="mt-16 pt-12 border-t border-brand-text/10">
                 <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-green mb-8">
                   {lang === "de" ? "Artikel-Galerie" : "Article Gallery"}
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {article.gallery.map((img, index) => (
+                  {bottomGallery.map((img, index) => (
                     <motion.figure
                       key={index}
                       initial={{ opacity: 0, y: 20 }}

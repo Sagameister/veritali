@@ -50,7 +50,7 @@ export const news = defineType({
       name: "body",
       title: "Main Content Body",
       type: "bilingualText",
-      description: "Formatierungshilfe / Markdown Guide:\n- **fett / bold** -> **wichtiger Text**\n- *kursiv / italic* -> *kursiver Text*\n- Überschrift / Subheading -> ## Meine Überschrift\n- Absätze / Paragraphs -> Nutzen Sie doppelte Zeilenumbrüche (zwei Mal Enter).",
+      description: "Formatierungshilfe / Markdown Guide:\n- **fett / bold** -> **wichtiger Text**\n- *kursiv / italic* -> *kursiver Text*\n- Überschrift / Subheading -> ## Meine Überschrift\n- Bild einfügen / Inline Image -> [image: 0] (fügt das 1. Bild aus der Galerie ein, [image: 1] das 2. Bild usw.)\n- Absätze / Paragraphs -> Nutzen Sie doppelte Zeilenumbrüche (zwei Mal Enter).",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
