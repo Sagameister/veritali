@@ -96,3 +96,12 @@ export interface Gateway {
   image: string; // the photo paired with this text block (checkerboard layout)
   href: string; // link destination, e.g. "/bewertung" or "/kontakt"
 }
+
+export interface NewsArticle {
+  slug: string;
+  title: Bilingual;
+  date: string;
+  coverImage: string;
+  excerpt: Bilingual;
+  body: Bilingual;
+}

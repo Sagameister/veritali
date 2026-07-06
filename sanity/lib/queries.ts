@@ -57,3 +57,25 @@ export const listingBySlugQuery = groq`
     }
   }
 `;
+
+export const newsQuery = groq`
+  *[_type == "news"] | order(date desc) {
+    "slug": slug.current,
+    title,
+    date,
+    "coverImage": coverImage.asset->url,
+    excerpt,
+    body
+  }
+`;
+
+export const newsBySlugQuery = groq`
+  *[_type == "news" && slug.current == $slug][0] {
+    "slug": slug.current,
+    title,
+    date,
+    "coverImage": coverImage.asset->url,
+    excerpt,
+    body
+  }
+`;

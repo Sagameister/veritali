@@ -875,6 +875,7 @@ export const navLinks: { label: Bilingual; href: string }[] = [
   { label: { de: "Leistungen", en: "Services" }, href: "/services" },
   { label: { de: "Unternehmen", en: "Company" }, href: "/unternehmen" },
   { label: { de: "Hilfsprojekte", en: "Aid Projects" }, href: "/hilfsprojekte" },
+  { label: { de: "News", en: "News" }, href: "/news" },
 ];
 
 export const footerContent = {
@@ -890,6 +891,7 @@ export const footerContent = {
         { label: { de: "Leistungen", en: "Services" }, href: "/services" },
         { label: { de: "Unternehmen", en: "Company" }, href: "/unternehmen" },
         { label: { de: "Hilfsprojekte", en: "Aid Projects" }, href: "/hilfsprojekte" },
+        { label: { de: "News", en: "News" }, href: "/news" },
       ],
     },
     {
