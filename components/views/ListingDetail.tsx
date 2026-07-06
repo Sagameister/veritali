@@ -24,7 +24,7 @@ import GalleryStrip from "../shared/GalleryStrip";
 import DividerLine from "../shared/DividerLine";
 import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
 import { getListings } from "../../lib/listings";
-import { t, DEFAULT_LANGUAGE } from "../../data/content";
+import { t, DEFAULT_LANGUAGE, statusLabels } from "../../data/content";
 import type { Language, Listing } from "../../types";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -102,7 +102,7 @@ function RelatedCard({ listing, lang }: { listing: Listing; lang: Language }) {
       {/* Price at the bottom */}
       <div className="pt-4 mt-auto">
         <p className="font-display font-medium text-xl md:text-2xl text-brand-accent">
-          {listing.price}
+          {listing.status === "sold" ? t(statusLabels.sold, lang).toUpperCase() : listing.price}
         </p>
       </div>
     </a>
@@ -328,9 +328,8 @@ export default function ListingDetail({
             <FactRow label={factLabels.object} value={listing.slug.replace(/-/g, " ")} />
             <FactRow label={factLabels.location} value={listing.location} />
             <FactRow label={factLabels.parameters} value={listing.parameters} />
-            <FactRow label={factLabels.price} value={listing.price} />
+            <FactRow label={factLabels.price} value={listing.status === "sold" ? t(statusLabels.sold, lang) : listing.price} />
             <FactRow label={factLabels.year} value={listing.year} />
-
           </Reveal>
         </div>
 

@@ -17,9 +17,11 @@ export async function generateMetadata({
   const listing = await getListingBySlug(params.slug);
   if (!listing) return { title: "Objekt" };
 
+  const priceText = listing.status === "sold" ? "Verkauft" : listing.price;
+
   return {
     title: `${listing.title.de} — ${listing.location}`,
-    description: `${listing.summary.de} ${listing.parameters}. ${listing.price}.`,
+    description: `${listing.summary.de} ${listing.parameters}. ${priceText}.`,
     openGraph: {
       title: listing.title.de,
       description: listing.summary.de,

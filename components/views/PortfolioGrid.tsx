@@ -73,7 +73,7 @@ function ListingCard({ listing, lang }: { listing: Listing; lang: Language }) {
             {t(listing.summary, lang)}
           </p>
           <p className="font-display font-medium text-lg text-brand-accent">
-            {listing.price}
+            {listing.status === "sold" ? t(statusLabels.sold, lang).toUpperCase() : listing.price}
           </p>
         </div>
       </a>
@@ -139,7 +139,7 @@ function CompactListingCard({ listing, lang }: { listing: Listing; lang: Languag
         {/* Price at the bottom */}
         <div className="pt-5 mt-auto">
           <p className="font-display font-medium text-xl md:text-2xl text-brand-accent">
-            {listing.price}
+            {listing.status === "sold" ? t(statusLabels.sold, lang).toUpperCase() : listing.price}
           </p>
         </div>
       </a>
