@@ -268,8 +268,8 @@ export default function ListingDetail({
   const [related, setRelated] = useState<Listing[]>([]);
 
   const { scrollY } = useScroll();
-  // Map window scroll of 0px -> 800px to vertical translation of 0px -> 160px
-  const yHero = useTransform(scrollY, [0, 800], [0, 160]);
+  // Map window scroll of 0px -> 800px to vertical translation of 0px -> 80px (protects mobile bounds)
+  const yHero = useTransform(scrollY, [0, 800], [0, 80]);
 
   useEffect(() => {
     getListings().then((allListings) => {
@@ -299,12 +299,12 @@ export default function ListingDetail({
         </h1>
       </header>
 
-      <div className="relative overflow-hidden w-full aspect-[16/8] bg-brand-surface">
+      <div className="relative overflow-hidden w-full aspect-[3/2] sm:aspect-[16/8] bg-brand-surface">
         <motion.img
           src={listing.heroImage || listing.image}
           alt={t(listing.title, lang)}
           style={{ y: yHero }}
-          className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover pointer-events-none select-none"
+          className="absolute inset-0 w-full h-[130%] -top-[15%] object-cover pointer-events-none select-none"
         />
       </div>
 
