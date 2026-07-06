@@ -11,6 +11,30 @@ import SplitText from "../shared/SplitText";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+// Lightweight inline markdown formatter (bold/italic/headings)
+function parseInlineMarkdown(text: string) {
+  const regex = /(\*\*.*?\*\*|\*.*?\*)/g;
+  const parts = text.split(regex);
+
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={index} className="font-bold text-brand-text">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return (
+        <em key={index} className="italic text-brand-text/90">
+          {part.slice(1, -1)}
+        </em>
+      );
+    }
+    return part;
+  });
+}
+
 export default function NewsDetail({
   article,
   lang,
@@ -88,17 +112,81 @@ export default function NewsDetail({
 
           {/* Body paragraphs */}
           <div className="max-w-2xl">
-            {paragraphs.map((p, idx) => (
-              <motion.p
-                key={idx}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: EASE, delay: idx * 0.08 }}
-                className="font-sans font-medium text-fs-body text-brand-text/80 leading-relaxed mb-8 whitespace-pre-line"
-              >
-                {p}
-              </motion.p>
-            ))}
+            {paragraphs.map((p, idx) => {
+              const trimmed = p.trim();
+              if (trimmed.startsWith("## ")) {
+                return (
+                  <motion.h2
+                    key={idx}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: EASE, delay: idx * 0.08 }}
+                    className="font-display font-medium text-2xl md:text-3xl text-brand-text mt-12 mb-6"
+                  >
+                    {parseInlineMarkdown(trimmed.replace(/^##\s+/, ""))}
+                  </motion.h2>
+                );
+              }
+              if (trimmed.startsWith("### ")) {
+                return (
+                  <motion.h3
+                    key={idx}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: EASE, delay: idx * 0.08 }}
+                    className="font-display font-medium text-xl md:text-2xl text-brand-accent mt-10 mb-4"
+                  >
+                    {parseInlineMarkdown(trimmed.replace(/^###\s+/, ""))}
+                  </motion.h3>
+                );
+              }
+              return (
+                <motion.p
+                  key={idx}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, ease: EASE, delay: idx * 0.08 }}
+                  className="font-sans font-medium text-fs-body text-brand-text/80 leading-relaxed mb-8 whitespace-pre-line"
+                >
+                  {parseInlineMarkdown(p)}
+                </motion.p>
+              );
+            })}
+
+            {/* Gallery images inside the article */}
+            {article.gallery && article.gallery.length > 0 && (
+              <div className="mt-16 pt-12 border-t border-brand-text/10">
+                <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-green mb-8">
+                  {lang === "de" ? "Artikel-Galerie" : "Article Gallery"}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {article.gallery.map((img, index) => (
+                    <motion.figure
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, ease: EASE, delay: index * 0.1 }}
+                      className="flex flex-col"
+                    >
+                      <div className="aspect-[3/2] w-full overflow-hidden bg-brand-surface mb-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={img.src}
+                          alt={img.caption ? t(img.caption, lang) : `Gallery Image ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {img.caption && (
+                        <figcaption className="font-sans font-medium text-xs text-brand-muted leading-relaxed">
+                          {t(img.caption, lang)}
+                        </figcaption>
+                      )}
+                    </motion.figure>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

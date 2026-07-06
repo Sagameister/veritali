@@ -50,8 +50,35 @@ export const news = defineType({
       name: "body",
       title: "Main Content Body",
       type: "bilingualText",
-      description: "Use double-newlines to separate paragraphs.",
+      description: "Formatierungshilfe / Markdown Guide:\n- **fett / bold** -> **wichtiger Text**\n- *kursiv / italic* -> *kursiver Text*\n- Überschrift / Subheading -> ## Meine Überschrift\n- Absätze / Paragraphs -> Nutzen Sie doppelte Zeilenumbrüche (zwei Mal Enter).",
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "gallery",
+      title: "Additional Gallery Images",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "galleryImage",
+          title: "Gallery Image",
+          fields: [
+            defineField({
+              name: "image",
+              title: "Image",
+              type: "image",
+              options: { hotspot: true },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "caption",
+              title: "Caption",
+              type: "bilingual",
+            }),
+          ],
+        },
+      ],
+      description: "Zusätzliche Bilder für den Artikel, die am Ende des Texts angezeigt werden.",
     }),
   ],
   preview: {

@@ -65,7 +65,11 @@ export const newsQuery = groq`
     date,
     "coverImage": coverImage.asset->url,
     excerpt,
-    body
+    body,
+    gallery[]{
+      "src": image.asset->url,
+      caption
+    }
   }
 `;
 
@@ -76,6 +80,10 @@ export const newsBySlugQuery = groq`
     date,
     "coverImage": coverImage.asset->url,
     excerpt,
-    body
+    body,
+    gallery[]{
+      "src": image.asset->url,
+      caption
+    }
   }
 `;

@@ -104,4 +104,8 @@ export interface NewsArticle {
   coverImage: string;
   excerpt: Bilingual;
   body: Bilingual;
+  gallery?: {
+    src: string;
+    caption?: Bilingual;
+  }[];
 }
