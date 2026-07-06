@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { getNewsArticles } from "../../lib/news";
 import type { Language, NewsArticle } from "../../types";
 import { t } from "../../data/content";
+import SplitText from "../shared/SplitText";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -49,8 +50,8 @@ export default function NewsPage({ lang }: { lang: Language }) {
         <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-green mb-4">
           {lang === "de" ? "Aktuelles" : "News & Insights"}
         </p>
-        <h1 className="font-display font-medium text-45xl md:text-fs-display leading-none text-brand-text mb-6">
-          {lang === "de" ? "Einblicke & Entwicklungen" : "Insights & Updates"}
+        <h1 className="font-display font-medium text-fs-h1-m md:text-fs-display leading-none text-brand-text mb-6">
+          <SplitText text={lang === "de" ? "Einblicke & Entwicklungen" : "Insights & Updates"} />
         </h1>
         <p className="font-sans font-medium text-fs-body text-brand-text/60 max-w-2xl leading-relaxed">
           {lang === "de"

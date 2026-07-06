@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { getNewsArticles } from "../../lib/news";
 import type { Language, NewsArticle } from "../../types";
 import { t } from "../../data/content";
+import SplitText from "../shared/SplitText";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -64,7 +65,7 @@ export default function NewsDetail({
 
           {/* Large Sticky Headline */}
           <h1 className="font-display font-medium text-3xl md:text-5xl lg:text-5.5xl leading-tight text-brand-text tracking-tight mb-8">
-            {t(article.title, lang)}
+            <SplitText text={t(article.title, lang)} staggerDelay={0.05} />
           </h1>
         </div>
 
