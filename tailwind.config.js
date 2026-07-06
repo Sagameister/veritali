@@ -32,11 +32,11 @@ module.exports = {
         // Typography scale tokens from design.md §2B (desktop values;
         // mobile sizes are applied responsively in components)
         "fs-display": ["5.5rem", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
-        "fs-display-m": ["3.25rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
+        "fs-display-m": ["2.25rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
         "fs-h1": ["3.5rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
-        "fs-h1-m": ["2.25rem", { lineHeight: "1.15", letterSpacing: "-0.02em" }],
+        "fs-h1-m": ["1.75rem", { lineHeight: "1.15", letterSpacing: "-0.02em" }],
         "fs-h2": ["2rem", { lineHeight: "1.25" }],
-        "fs-h2-m": ["1.5rem", { lineHeight: "1.3" }],
+        "fs-h2-m": ["1.25rem", { lineHeight: "1.3" }],
         "fs-body": ["1.2rem", { lineHeight: "1.75" }],
         "fs-body-m": ["1.0625rem", { lineHeight: "1.7" }],
         "fs-small": ["0.9375rem", { lineHeight: "1.65" }],

@@ -91,7 +91,7 @@ export default function Services({ lang = DEFAULT_LANGUAGE }: { lang?: Language 
               </span>
 
               {/* Oversized title — the design element itself */}
-              <h3 className="font-display font-medium text-fs-h1-m md:text-fs-h1 tracking-tight text-brand-text transition-colors duration-700 ease-editorial group-hover:text-brand-orange">
+              <h3 className="font-display font-medium text-xl sm:text-2xl md:text-fs-h1 tracking-tight text-brand-text transition-colors duration-700 ease-editorial group-hover:text-brand-orange">
                 <span className="hover-mask-reveal">
                   <span className="text-primary">{t(service.title, lang)}</span>
                   <span className="text-secondary" aria-hidden="true">
