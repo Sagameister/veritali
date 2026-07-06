@@ -331,17 +331,6 @@ export default function ListingDetail({
             <FactRow label={factLabels.price} value={listing.price} />
             <FactRow label={factLabels.year} value={listing.year} />
 
-            <a
-              href="/#contact"
-              className="group mt-8 flex items-center justify-between border border-brand-accent/50 px-5 py-3.5 hover:border-brand-orange"
-            >
-              <span className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-accent group-hover:text-brand-orange">
-                {lang === "de" ? "Besichtigung anfragen" : "Request a viewing"}
-              </span>
-              <span className="text-brand-accent transition-transform duration-700 ease-editorial group-hover:translate-x-1">
-                +
-              </span>
-            </a>
           </Reveal>
         </div>
 
