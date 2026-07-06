@@ -116,13 +116,13 @@ function mapPropstackUnitToListing(unit: any): Listing {
     slug,
     status,
     category: {
-      de: "STUDIO MANDAT",
-      en: "STUDIO MANDATE",
+      de: "VERMARKTUNG",
+      en: "BROKERAGE",
     },
     title: { de: titleDe, en: titleEn },
     location: unit.city ? `${unit.city}${unit.zip_code ? `, ${unit.zip_code}` : ""}` : "Baden-Württemberg",
     year,
-    parameters: paramsArray.join(" | ") || "Studio Mandat",
+    parameters: paramsArray.join(" | ") || "Vermarktung",
     price: formatPrice(priceVal),
     summary: {
       de: descDe.substring(0, 180) + (descDe.length > 180 ? "..." : ""),
