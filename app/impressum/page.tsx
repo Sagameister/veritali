@@ -126,9 +126,9 @@ export default function Impressum() {
         {/* ---- Legal prose sections ---- */}
         <section className="px-6 md:px-12 pb-20">
           <DividerLine />
-          <div className="max-w-3xl pt-16 space-y-14">
+          <div className="max-w-4xl pt-16 columns-1 md:columns-2 gap-8 md:gap-12">
             {sections.map((section, idx) => (
-              <div key={idx}>
+              <div key={idx} className="mb-10 break-inside-avoid">
                 <h2 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-5">
                   <SplitText text={section.title} staggerDelay={0.04} />
                 </h2>

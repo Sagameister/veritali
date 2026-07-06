@@ -335,46 +335,48 @@ export default function ListingDetail({
 
         {/* Editorial body */}
         <div className="lg:col-span-7 lg:col-start-6">
-          {/* Bold lead paragraph */}
-          <Reveal>
-            <p className="font-sans font-medium text-fs-body-m md:text-fs-body text-brand-text leading-relaxed mb-12">
-              {t(listing.detail.lead, lang)}
-            </p>
-          </Reveal>
-
-          {/* Sections: heading + prose + bullets */}
-          {listing.detail.sections.map((section, idx) => (
-            <Reveal key={idx} className="mb-12">
-              <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4">
-                {t(section.title, lang)}
-              </h3>
-              <p className="font-sans font-medium text-fs-small md:text-fs-body-m text-brand-muted leading-relaxed mb-6">
-                {t(section.body, lang)}
+          <div className="columns-1 md:columns-2 gap-8 md:gap-12 mb-12">
+            {/* Bold lead paragraph */}
+            <Reveal className="break-inside-avoid mb-8">
+              <p className="font-sans font-medium text-fs-body-m md:text-fs-body text-brand-text leading-relaxed">
+                {t(listing.detail.lead, lang)}
               </p>
-              {section.bullets && (
-                <ul className="space-y-3">
-                  {section.bullets.map((bullet, i) => (
-                    <li
-                      key={i}
-                      className="flex gap-3 font-sans font-medium text-fs-small text-brand-muted"
-                    >
-                      <span className="text-brand-green shrink-0">—</span>
-                      {t(bullet, lang)}
-                    </li>
-                  ))}
-                </ul>
-              )}
             </Reveal>
-          ))}
 
-          {/* Optional pull quote */}
-          {listing.detail.quote && (
-            <Reveal>
-              <blockquote className="border-l-2 border-brand-accent pl-6 py-2 font-display font-medium text-xl md:text-2xl text-brand-text/90 italic">
-                „{t(listing.detail.quote, lang)}“
-              </blockquote>
-            </Reveal>
-          )}
+            {/* Sections: heading + prose + bullets */}
+            {listing.detail.sections.map((section, idx) => (
+              <Reveal key={idx} className="mb-12 break-inside-avoid">
+                <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4">
+                  {t(section.title, lang)}
+                </h3>
+                <p className="font-sans font-medium text-fs-small md:text-fs-body-m text-brand-muted leading-relaxed mb-6">
+                  {t(section.body, lang)}
+                </p>
+                {section.bullets && (
+                  <ul className="space-y-3">
+                    {section.bullets.map((bullet, i) => (
+                      <li
+                        key={i}
+                        className="flex gap-3 font-sans font-medium text-fs-small text-brand-muted"
+                      >
+                        <span className="text-brand-green shrink-0">—</span>
+                        {t(bullet, lang)}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Reveal>
+            ))}
+
+            {/* Optional pull quote */}
+            {listing.detail.quote && (
+              <Reveal className="break-inside-avoid">
+                <blockquote className="border-l-2 border-brand-accent pl-6 py-2 font-display font-medium text-xl md:text-2xl text-brand-text/90 italic">
+                  „{t(listing.detail.quote, lang)}“
+                </blockquote>
+              </Reveal>
+            )}
+          </div>
 
           {/* Property inquiry form at the bottom of description */}
           <PropertyInquiryForm listing={listing} lang={lang} />

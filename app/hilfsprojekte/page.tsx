@@ -62,7 +62,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function Prose({ children }: { children: React.ReactNode }) {
   return (
-    <p className="font-sans font-medium text-fs-small md:text-fs-body-m text-brand-muted leading-relaxed mb-6">
+    <p className="font-sans font-medium text-fs-small md:text-fs-body-m text-brand-muted leading-relaxed mb-6 break-inside-avoid">
       {children}
     </p>
   );
@@ -270,9 +270,9 @@ export default function Hilfsprojekte() {
             <SplitText text={de ? "Detaillierte Projektbeschreibung" : "Detailed project description"} />
           </h2>
 
-          <div className="max-w-4xl">
+          <div className="max-w-4xl columns-1 md:columns-2 gap-8 md:gap-12">
             {/* Economy & agriculture */}
-            <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4">
+            <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4 break-inside-avoid">
               {de
                 ? "Wirtschaft und sozio-ökonomische Rolle der Landwirtschaft"
                 : "Economy and the socio-economic role of agriculture"}
@@ -304,9 +304,9 @@ export default function Hilfsprojekte() {
         />
 
         <section className="px-6 md:px-12 py-8">
-          <div className="max-w-4xl">
+          <div className="max-w-4xl columns-1 md:columns-2 gap-8 md:gap-12">
             {/* Education */}
-            <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4 mt-8">
+            <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4 break-inside-avoid">
               {de
                 ? "Bildungssituation im kulturellen Kontext"
                 : "Education in its cultural context"}
@@ -338,9 +338,9 @@ export default function Hilfsprojekte() {
         />
 
         <section className="px-6 md:px-12 py-8 pb-28">
-          <div className="max-w-4xl">
+          <div className="max-w-4xl columns-1 md:columns-2 gap-8 md:gap-12 mb-12">
             {/* Geography */}
-            <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4 mt-8">
+            <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4 break-inside-avoid">
               {de ? "Die Projektstandorte" : "The project locations"}
             </h3>
             <Prose>
@@ -355,7 +355,7 @@ export default function Hilfsprojekte() {
             </Prose>
 
             {/* Budget */}
-            <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4 mt-12">
+            <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4 break-inside-avoid">
               {de ? "Projektdurchführung und Budget" : "Implementation and budget"}
             </h3>
             <Prose>
@@ -368,10 +368,11 @@ export default function Hilfsprojekte() {
                 ? "VERITALI Immobilien hat es sich zum Ziel gesetzt, diesen Betrag für die nächsten 6 Jahre zur Verfügung zu stellen, damit eine komplette Grundschulbildung für diese Kinder in Not gewährleistet werden kann. So werden sie zu starken, selbstständigen Persönlichkeiten, deren Talente und Träume gefördert werden."
                 : "VERITALI Immobilien has committed to providing this amount for the next six years, guaranteeing a complete primary education for these children in need — so they grow into strong, independent personalities whose talents and dreams are nurtured."}
             </Prose>
+          </div>
 
-            {/* Cost table */}
-            <div className="border-t border-brand-text/15 mt-8">
-              <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-text/60 py-4">
+          {/* Cost table */}
+          <div className="max-w-2xl border-t border-brand-text/15">
+            <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-text/60 py-4">
                 {de
                   ? "Kostenaufstellung (Stand: Juni 2021; 1 € = 1.9007,9561 Fc)"
                   : "Cost breakdown (as of June 2021; €1 = 1,9007.9561 Fc)"}
@@ -417,9 +418,8 @@ export default function Hilfsprojekte() {
                 </span>
               </div>
             </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
 
       <Footer lang={lang} />
     </main>

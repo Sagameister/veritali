@@ -177,14 +177,14 @@ export default function UnternehmenPage({ lang = "de" }: { lang?: Language }) {
 
       {/* ---- 2. Section 1 (Wahrheit Story & Portrait) ---- */}
       <section className="px-6 md:px-12 pb-28 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        <div className="lg:col-span-6 space-y-8 font-sans font-medium text-fs-body-m text-brand-muted leading-relaxed max-w-2xl">
-          <p className="text-brand-text text-xl font-display leading-snug">
+        <div className="lg:col-span-6 font-sans font-medium text-fs-body-m text-brand-muted leading-relaxed max-w-4xl columns-1 md:columns-2 gap-8">
+          <p className="text-brand-text text-xl font-display leading-snug mb-6 break-inside-avoid">
             {content.wahrheitIntro[lang]}
           </p>
-          <p>{content.wahrheitGoddess[lang]}</p>
-          <p>{content.wahrheitBocca[lang]}</p>
+          <p className="mb-6 break-inside-avoid">{content.wahrheitGoddess[lang]}</p>
+          <p className="mb-6 break-inside-avoid">{content.wahrheitBocca[lang]}</p>
 
-          <div className="pt-8 border-t border-brand-text/10 space-y-6">
+          <div className="pt-8 border-t border-brand-text/10 space-y-6 break-inside-avoid">
             <h3 className="font-display font-medium text-2xl text-brand-orange">
               {content.wahrheitQuestion[lang]}
             </h3>
@@ -227,28 +227,30 @@ export default function UnternehmenPage({ lang = "de" }: { lang?: Language }) {
             </p>
           </div>
 
-          <div className="lg:col-span-7 lg:col-start-6 space-y-6">
-            <h2 className="font-display font-medium text-fs-h2-m md:text-fs-h1 leading-tight text-[#1E2229]">
+          <div className="lg:col-span-7 lg:col-start-6">
+            <h2 className="font-display font-medium text-fs-h2-m md:text-fs-h1 leading-tight text-[#1E2229] mb-4">
               <SplitText text={content.preiseTitle[lang]} />
             </h2>
-            <h3 className="font-display font-medium text-xl text-[#468E99] uppercase tracking-wider">
+            <h3 className="font-display font-medium text-xl text-[#468E99] uppercase tracking-wider mb-6">
               {content.preiseQuestion[lang]}
             </h3>
-            <p className="font-sans font-medium text-fs-body-m text-[#1E2229]/80 leading-relaxed">
-              {content.preiseOverhead[lang]}
-            </p>
-            <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed">
-              {content.preiseFranchise[lang]}
-            </p>
-            <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed font-semibold">
-              {content.preiseCommission[lang]}
-            </p>
-            <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed">
-              {content.preiseTransparency[lang]}
-            </p>
-            <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed">
-              {content.preiseTrust[lang]}
-            </p>
+            <div className="columns-1 md:columns-2 gap-8">
+              <p className="font-sans font-medium text-fs-body-m text-[#1E2229]/80 leading-relaxed mb-4 break-inside-avoid">
+                {content.preiseOverhead[lang]}
+              </p>
+              <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed mb-4 break-inside-avoid">
+                {content.preiseFranchise[lang]}
+              </p>
+              <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed font-semibold mb-4 break-inside-avoid">
+                {content.preiseCommission[lang]}
+              </p>
+              <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed mb-4 break-inside-avoid">
+                {content.preiseTransparency[lang]}
+              </p>
+              <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed mb-4 break-inside-avoid">
+                {content.preiseTrust[lang]}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -265,22 +267,24 @@ export default function UnternehmenPage({ lang = "de" }: { lang?: Language }) {
             </span>
           </div>
 
-          <div className="lg:col-span-7 lg:col-start-6 space-y-6">
-            <h2 className="font-display font-medium text-fs-h2-m md:text-fs-h1 leading-tight text-brand-text">
+          <div className="lg:col-span-7 lg:col-start-6">
+            <h2 className="font-display font-medium text-fs-h2-m md:text-fs-h1 leading-tight text-brand-text mb-8">
               <SplitText text={content.hilftTitle[lang]} />
             </h2>
-            <p className="font-sans font-medium text-fs-body-m text-brand-muted leading-relaxed">
-              {content.hilftConscience[lang]}
-            </p>
-            <p className="font-sans font-medium text-fs-small text-brand-muted leading-relaxed font-semibold text-brand-accent">
-              {content.hilftPercent[lang]}
-            </p>
-            <p className="font-sans font-medium text-fs-small text-brand-muted leading-relaxed">
-              {content.hilftProject[lang]}
-            </p>
-            <p className="font-sans font-medium text-fs-small text-brand-muted leading-relaxed">
-              {content.hilftDrVerena[lang]}
-            </p>
+            <div className="columns-1 md:columns-2 gap-8 mb-6">
+              <p className="font-sans font-medium text-fs-body-m text-brand-muted leading-relaxed mb-4 break-inside-avoid">
+                {content.hilftConscience[lang]}
+              </p>
+              <p className="font-sans font-medium text-fs-small text-brand-muted leading-relaxed font-semibold text-brand-accent mb-4 break-inside-avoid">
+                {content.hilftPercent[lang]}
+              </p>
+              <p className="font-sans font-medium text-fs-small text-brand-muted leading-relaxed mb-4 break-inside-avoid">
+                {content.hilftProject[lang]}
+              </p>
+              <p className="font-sans font-medium text-fs-small text-brand-muted leading-relaxed mb-4 break-inside-avoid">
+                {content.hilftDrVerena[lang]}
+              </p>
+            </div>
             <a
               href="/hilfsprojekte"
               className="group inline-flex items-center gap-4 font-sans font-bold text-fs-label uppercase tracking-[0.18em] text-brand-accent hover:text-brand-orange transition-colors duration-700 ease-editorial pt-4"
@@ -305,16 +309,18 @@ export default function UnternehmenPage({ lang = "de" }: { lang?: Language }) {
             />
           </div>
 
-          <div className="lg:col-span-6 lg:col-start-7 space-y-6">
-            <h2 className="font-display font-medium text-fs-h2-m md:text-fs-h1 leading-tight text-[#1E2229]">
+          <div className="lg:col-span-6 lg:col-start-7">
+            <h2 className="font-display font-medium text-fs-h2-m md:text-fs-h1 leading-tight text-[#1E2229] mb-6">
               <SplitText text={content.alleinauftragTitle[lang]} />
             </h2>
-            <p className="font-sans font-medium text-fs-body-m text-[#1E2229]/80 leading-relaxed">
-              {content.alleinauftragBoutique[lang]}
-            </p>
-            <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed">
-              {content.alleinauftragCongo[lang]}
-            </p>
+            <div className="columns-1 md:columns-2 gap-8 mb-6">
+              <p className="font-sans font-medium text-fs-body-m text-[#1E2229]/80 leading-relaxed mb-4 break-inside-avoid">
+                {content.alleinauftragBoutique[lang]}
+              </p>
+              <p className="font-sans font-medium text-fs-small text-[#1E2229]/70 leading-relaxed mb-4 break-inside-avoid">
+                {content.alleinauftragCongo[lang]}
+              </p>
+            </div>
 
             <div className="pt-8 border-t border-[#1E2229]/15">
               <p className="font-sans font-bold text-fs-label uppercase tracking-[0.18em] text-[#468E99] mb-4">

@@ -499,9 +499,9 @@ export default function Datenschutz() {
               <h2 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text pt-12 mb-8">
                 {group.title}
               </h2>
-              <div className="max-w-3xl space-y-10 pb-12">
+              <div className="max-w-4xl columns-1 md:columns-2 gap-8 md:gap-12 pb-12">
                 {group.subs.map((sub, sIdx) => (
-                  <div key={sIdx}>
+                  <div key={sIdx} className="mb-8 break-inside-avoid">
                     {sub.heading && (
                       <h3 className="font-sans font-bold text-fs-label uppercase tracking-[0.18em] text-brand-green mb-4">
                         {sub.heading}
