@@ -14,6 +14,44 @@ import { DEFAULT_LANGUAGE } from "../../data/content";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+// Slide transition variants for mobile swiping
+const slideVariants = {
+  enter: (dir: number) => ({
+    x: dir > 0 ? "100%" : dir < 0 ? "-100%" : 0,
+    opacity: 0,
+    scale: 0.95
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1
+  },
+  exit: (dir: number) => ({
+    x: dir > 0 ? "-100%" : dir < 0 ? "100%" : 0,
+    opacity: 0,
+    scale: 0.95
+  })
+};
+
+// Zoom-crossfade variants for desktop
+const zoomVariants = {
+  enter: {
+    x: 0,
+    opacity: 0,
+    scale: 0.88
+  },
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1
+  },
+  exit: {
+    x: 0,
+    opacity: 0,
+    scale: 0.88
+  }
+};
+
 // Room label badge — dark brand panel, light text
 function RoomBadge({ label }: { label: string }) {
   return (
@@ -34,6 +72,15 @@ export default function GalleryStrip({
 }) {
   const scrollRef = useRef<HTMLDivElement>(null); // sliding row
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [direction, setDirection] = useState(0); // 1 for next, -1 for prev
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Track if we can scroll left/right to show/hide arrows
   const [scrollState, setScrollState] = useState({ isStart: true, isEnd: false });
@@ -69,8 +116,14 @@ export default function GalleryStrip({
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setLightbox(null);
-      if (e.key === "ArrowRight") setLightbox((i) => (i === null ? i : (i + 1) % images.length));
-      if (e.key === "ArrowLeft") setLightbox((i) => (i === null ? i : (i - 1 + images.length) % images.length));
+      if (e.key === "ArrowRight") {
+        setDirection(1);
+        setLightbox((i) => (i === null ? i : (i + 1) % images.length));
+      }
+      if (e.key === "ArrowLeft") {
+        setDirection(-1);
+        setLightbox((i) => (i === null ? i : (i - 1 + images.length) % images.length));
+      }
     };
 
     window.addEventListener("keydown", onKey);
@@ -90,6 +143,7 @@ export default function GalleryStrip({
             key={idx}
             onClick={(e) => {
               if (e.detail > 0) e.currentTarget.blur();
+              setDirection(0);
               setLightbox(idx);
             }}
             className="relative block w-full focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent"
@@ -132,6 +186,7 @@ export default function GalleryStrip({
               key={idx}
               onClick={(e) => {
                 if (e.detail > 0) e.currentTarget.blur();
+                setDirection(0);
                 setLightbox(idx);
               }}
               className="group relative h-[480px] aspect-[3/2] flex-shrink-0 overflow-hidden focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-accent"
@@ -181,7 +236,7 @@ export default function GalleryStrip({
             aria-label={alt}
           >
             <div className="absolute inset-0 flex items-center justify-center p-8 md:p-20 overflow-hidden">
-              <AnimatePresence initial={false}>
+              <AnimatePresence initial={false} custom={direction}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <motion.img
                   key={lightbox}
@@ -192,18 +247,29 @@ export default function GalleryStrip({
                   dragConstraints={{ left: 0, right: 0 }}
                   dragElastic={0.25}
                   onDragEnd={(_, info) => {
-                    const swipedLeft = info.offset.x < -80 || info.velocity.x < -500;
-                    const swipedRight = info.offset.x > 80 || info.velocity.x > 500;
+                    const swipedLeft = info.offset.x < -60 || info.velocity.x < -400;
+                    const swipedRight = info.offset.x > 60 || info.velocity.x > 400;
                     if (swipedLeft) {
+                      setDirection(1);
                       setLightbox((lightbox + 1) % images.length);
                     } else if (swipedRight) {
+                      setDirection(-1);
                       setLightbox((lightbox - 1 + images.length) % images.length);
                     }
                   }}
-                  initial={{ opacity: 0, scale: 0.88 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.88 }}
-                  transition={{ duration: 0.65, ease: EASE }}
+                  custom={direction}
+                  variants={isMobile ? slideVariants : zoomVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={
+                    isMobile
+                      ? {
+                          x: { type: "spring", stiffness: 300, damping: 30 },
+                          opacity: { duration: 0.35 }
+                        }
+                      : { duration: 0.65, ease: EASE }
+                  }
                   className="absolute max-h-[82vh] max-w-[88vw] object-contain cursor-grab active:cursor-grabbing touch-none"
                 />
               </AnimatePresence>
@@ -233,6 +299,7 @@ export default function GalleryStrip({
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                setDirection(-1);
                 setLightbox((lightbox - 1 + images.length) % images.length);
               }}
               aria-label="Zurück / Previous"
@@ -243,6 +310,7 @@ export default function GalleryStrip({
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                setDirection(1);
                 setLightbox((lightbox + 1) % images.length);
               }}
               aria-label="Weiter / Next"
