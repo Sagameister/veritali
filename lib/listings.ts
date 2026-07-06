@@ -162,26 +162,44 @@ export async function getListings(): Promise<Listing[]> {
   }
 
   try {
-    const res = await fetch(API_URL, {
-      headers: {
-        "X-API-KEY": PROPSTACK_API_KEY,
-        Accept: "application/json",
-      },
-      next: { revalidate: 60 }, // Cache listings for 1 minute
-    });
+    let page = 1;
+    let allUnits: any[] = [];
+    let hasMore = true;
 
-    if (!res.ok) {
-      throw new Error(`Propstack API responded with status ${res.status}`);
+    while (hasMore && page <= 10) {
+      const url = `${API_URL}&page=${page}`;
+      const res = await fetch(url, {
+        headers: {
+          "X-API-KEY": PROPSTACK_API_KEY,
+          Accept: "application/json",
+        },
+        next: { revalidate: 60 }, // Cache listings for 1 minute
+      });
+
+      if (!res.ok) {
+        throw new Error(`Propstack API responded with status ${res.status} on page ${page}`);
+      }
+
+      const data = await res.json();
+      const units = Array.isArray(data) ? data : data?.data || [];
+
+      if (units.length === 0) {
+        hasMore = false;
+      } else {
+        allUnits.push(...units);
+        if (units.length < 20) {
+          hasMore = false;
+        } else {
+          page++;
+        }
+      }
     }
 
-    const data = await res.json();
-    const units = Array.isArray(data) ? data : data?.data || [];
-
-    if (!units || units.length === 0) {
+    if (allUnits.length === 0) {
       return mockListings;
     }
 
-    return units.filter((unit: any) => unit.title?.value).map(mapPropstackUnitToListing);
+    return allUnits.filter((unit: any) => unit.title?.value).map(mapPropstackUnitToListing);
   } catch (error) {
     console.error("Failed to fetch listings from Propstack API, using fallback:", error);
     return mockListings;
