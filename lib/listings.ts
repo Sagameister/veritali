@@ -116,13 +116,13 @@ function mapPropstackUnitToListing(unit: any): Listing {
     slug,
     status,
     category: {
-      de: "VERMARKTUNG",
-      en: "BROKERAGE",
+      de: "AKTUELL",
+      en: "CURRENT",
     },
     title: { de: titleDe, en: titleEn },
     location: unit.city ? `${unit.city}${unit.zip_code ? `, ${unit.zip_code}` : ""}` : "Baden-Württemberg",
     year,
-    parameters: paramsArray.join(" | ") || "Vermarktung",
+    parameters: paramsArray.join(" | ") || "Aktuell",
     price: formatPrice(priceVal),
     summary: {
       de: descDe.substring(0, 180) + (descDe.length > 180 ? "..." : ""),
