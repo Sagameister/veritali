@@ -57,6 +57,7 @@ Typography — **the user changed the weights from the spec. Current law:**
 - **Global Body Font Resizing:** Global body text sizes and line-heights were increased slightly (+6% to +7%) to maximize editorial legibility:
   * `fs-body` = `1.2rem` / `lineHeight: 1.75`
   * `fs-body-m` = `1.0625rem` / `lineHeight: 1.7`
+- **Two-Column Body Text Layout:** Body paragraphs on text-heavy pages (News Detail, Listing Detail, Congo Project, Philosophy, Impressum, and Datenschutz) are formatted in two columns on desktop screens (`columns-1 md:columns-2 gap-8 md:gap-12`). Elements inside use `break-inside-avoid` to ensure headings, paragraphs, and list blocks do not cut/split across columns.
 
 Motion rules (unchanged from spec, strictly enforced):
 - ONE easing curve everywhere: `cubic-bezier(0.22, 1, 0.36, 1)` (`ease-editorial` in Tailwind; `EASE` const in components). No springs EXCEPT:
@@ -97,6 +98,9 @@ Motion rules (unchanged from spec, strictly enforced):
   * Live site editor is at `/studio`. whitelisted as a CORS origin in the Sanity Manage console with **"Allow credentials"** enabled.
 - **Propstack Integration (`lib/listings.ts`):**
   * Property listings are fetched directly from the **Propstack API** via your API key (`PROPSTACK_API_KEY`).
+  * **Pagination Support:** The Propstack API paginates in chunks of 20 by default. `getListings` implements an automatic page loop to retrieve and aggregate all pages, ensuring all 60+ properties show up on the website.
+  * **Category Labeling:** All properties loaded from Propstack are labeled as `"AKTUELL"` (de) / `"CURRENT"` (en) on the frontend rather than their raw system category.
+  * **Sold Items Price Hiding:** When a property's status is `"sold"`, the price is hidden and replaced with `"SOLD"` / `"VERKAUFT"` everywhere on the frontend (cards, listing detail facts table, and SEO metadata).
   * If the key is missing or calls fail, it falls back to the static listings in `data/content.ts`.
   * **Sanity Listings:** A legacy `listing` schema exists in Sanity, but it is currently **not** used by the website's frontend. Properties should be edited inside Propstack, and News should be edited inside Sanity.
 - **In-Page Contact Forms:**
