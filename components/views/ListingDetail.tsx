@@ -336,13 +336,6 @@ export default function ListingDetail({
         {/* Editorial body */}
         <div className="lg:col-span-7 lg:col-start-6">
           <div className="columns-1 md:columns-2 gap-8 md:gap-12 mb-12">
-            {/* Bold lead paragraph */}
-            <Reveal className="break-inside-avoid mb-8">
-              <p className="font-sans font-medium text-fs-body-m md:text-fs-body text-brand-text leading-relaxed">
-                {t(listing.detail.lead, lang)}
-              </p>
-            </Reveal>
-
             {/* Sections: heading + prose + bullets */}
             {listing.detail.sections.map((section, idx) => (
               <Reveal key={idx} className="mb-12 break-inside-avoid">
