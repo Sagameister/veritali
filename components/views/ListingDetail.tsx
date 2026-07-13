@@ -294,7 +294,7 @@ export default function ListingDetail({
         <p className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-green mb-4">
           {t(listing.category, lang)}
         </p>
-        <h1 className="font-display font-medium text-fs-h1-m md:text-fs-display leading-none text-brand-text max-w-5xl mb-12">
+        <h1 className="font-display font-medium text-fs-h1-m md:text-fs-h1 leading-[0.95] text-brand-text max-w-5xl mb-12">
           <SplitText text={t(listing.title, lang)} staggerDelay={0.05} />
         </h1>
       </header>
