@@ -119,7 +119,9 @@ Motion rules (unchanged from spec, strictly enforced):
 
 - Root layout metadata title leads with "Immobilienmakler Heidelberg", region-rich description/keywords, OpenGraph, and a JSON-LD `RealEstateAgent` block (Heidelberg, areaServed: Heidelberg, Mannheim, Bergstraße, Stuttgart, Frankfurt, Berlin; priceRange 1,5% Provision).
 - Visible SEO copy: hero subline "Ihr kompetenter und fairer Immobilienmakler in Heidelberg — nur 1,5% Provision" + regions strip; repeated in footer. Every page has its own metadata via layout.tsx.
-- TODO when domain exists: sitemap.xml, canonical URL, robots, real alt-texts, Google Business Profile.
+- TODO when domain exists:
+  * sitemap.xml, canonical URL, robots, real alt-texts, Google Business Profile.
+  * Point DNS to production and verify that Mailchimp environment variables (`MAILCHIMP_API_KEY`, `MAILCHIMP_AUDIENCE_ID`) are configured and fully connected.
 
 ---
 
