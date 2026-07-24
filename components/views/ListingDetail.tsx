@@ -402,9 +402,11 @@ export default function ListingDetail({
                           key={rIdx}
                           className="flex flex-col gap-1.5 py-4 border-b border-brand-text/10"
                         >
-                          <span className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-text/60">
-                            {row.key || "—"}
-                          </span>
+                          {row.key && (
+                            <span className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-text/60">
+                              {row.key}
+                            </span>
+                          )}
                           <div className="text-left space-y-1">
                             {row.values.map((val, vIdx) => (
                               <span
