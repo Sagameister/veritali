@@ -52,6 +52,53 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
   );
 }
 
+/* ---- Furnishing Parsing Helper ---- */
+interface FurnishingItem {
+  key: string;
+  values: string[];
+}
+
+function parseFurnishing(text: string): FurnishingItem[] {
+  if (!text) return [];
+  
+  const lines = text.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0);
+  const parsed: FurnishingItem[] = [];
+  let currentKey = null;
+  let currentValues: string[] = [];
+
+  const keyRegex = /^([^:\n]{2,40}):\s*(.*)$/;
+
+  for (let line of lines) {
+    let isBullet = false;
+    if (line.startsWith("-") || line.startsWith("*") || line.startsWith("•")) {
+      line = line.replace(/^[-*•]\s*/, "").trim();
+      isBullet = true;
+    }
+
+    const match = line.match(keyRegex);
+    if (match && !isBullet) {
+      if (currentKey) {
+        parsed.push({ key: currentKey, values: currentValues });
+      }
+      currentKey = match[1].trim();
+      const inlineValue = match[2].trim();
+      currentValues = inlineValue ? [inlineValue] : [];
+    } else {
+      if (currentKey) {
+        currentValues.push(line);
+      } else {
+        parsed.push({ key: "", values: [line] });
+      }
+    }
+  }
+
+  if (currentKey) {
+    parsed.push({ key: currentKey, values: currentValues });
+  }
+
+  return parsed.filter(item => item.values.length > 0);
+}
+
 /* ---- 4. Facts table row ---- */
 function FactRow({ label, value }: { label: string; value: string }) {
   return (
@@ -337,29 +384,62 @@ export default function ListingDetail({
         <div className="lg:col-span-7 lg:col-start-6">
           <div className="columns-1 md:columns-2 gap-8 md:gap-12 mb-12">
             {/* Sections: heading + prose + bullets */}
-            {listing.detail.sections.map((section, idx) => (
-              <Reveal key={idx} className="mb-12 break-inside-avoid">
-                <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4">
-                  {t(section.title, lang)}
-                </h3>
-                <p className="font-sans font-medium text-fs-small md:text-fs-body-m text-brand-muted leading-relaxed mb-6">
-                  {t(section.body, lang)}
-                </p>
-                {section.bullets && (
-                  <ul className="space-y-3">
-                    {section.bullets.map((bullet, i) => (
-                      <li
-                        key={i}
-                        className="flex gap-3 font-sans font-medium text-fs-small text-brand-muted"
-                      >
-                        <span className="text-brand-green shrink-0">—</span>
-                        {t(bullet, lang)}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </Reveal>
-            ))}
+            {listing.detail.sections.map((section, idx) => {
+              const isFurnishing =
+                t(section.title, "de") === "Ausstattung" ||
+                t(section.title, "en") === "Furnishing";
+
+              return (
+                <Reveal key={idx} className="mb-12 break-inside-avoid">
+                  <h3 className="font-display font-medium text-fs-h2-m md:text-fs-h2 text-brand-text mb-4">
+                    {t(section.title, lang)}
+                  </h3>
+                  
+                  {isFurnishing ? (
+                    <div className="border-t border-brand-text/10 mt-6 mb-8">
+                      {parseFurnishing(t(section.body, lang)).map((row, rIdx) => (
+                        <div
+                          key={rIdx}
+                          className="flex justify-between items-baseline gap-6 py-4 border-b border-brand-text/10"
+                        >
+                          <span className="font-sans font-medium text-fs-label uppercase tracking-[0.18em] text-brand-text/60 shrink-0">
+                            {row.key || "—"}
+                          </span>
+                          <div className="text-right">
+                            {row.values.map((val, vIdx) => (
+                              <span
+                                key={vIdx}
+                                className="block font-sans font-medium text-fs-small text-brand-text"
+                              >
+                                {val}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="font-sans font-medium text-fs-small md:text-fs-body-m text-brand-muted leading-relaxed mb-6 whitespace-pre-line">
+                      {t(section.body, lang)}
+                    </p>
+                  )}
+
+                  {section.bullets && (
+                    <ul className="space-y-3">
+                      {section.bullets.map((bullet, i) => (
+                        <li
+                          key={i}
+                          className="flex gap-3 font-sans font-medium text-fs-small text-brand-muted"
+                        >
+                          <span className="text-brand-green shrink-0">—</span>
+                          {t(bullet, lang)}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </Reveal>
+              );
+            })}
 
             {/* Optional pull quote */}
             {listing.detail.quote && (
