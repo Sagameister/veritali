@@ -407,13 +407,14 @@ export default function ListingDetail({
                               {row.key}
                             </span>
                           )}
-                          <div className="text-left space-y-1">
+                          <div className="text-left space-y-2">
                             {row.values.map((val, vIdx) => (
                               <span
                                 key={vIdx}
-                                className="block font-sans font-medium text-fs-small text-brand-text"
+                                className="flex gap-2.5 font-sans font-medium text-fs-small text-brand-text"
                               >
-                                {val}
+                                <span className="text-brand-green shrink-0">—</span>
+                                <span>{val}</span>
                               </span>
                             ))}
                           </div>

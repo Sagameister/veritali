@@ -19,9 +19,17 @@ import type {
 
 export const DEFAULT_LANGUAGE: Language = "de";
 
+export function stripEmojis(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu, "")
+    .replace(/  +/g, " ")
+    .trim();
+}
+
 /** Pick the right language out of a bilingual string pair. */
 export function t(field: Bilingual, lang: Language = DEFAULT_LANGUAGE): string {
-  return field[lang];
+  return stripEmojis(field[lang]);
 }
 
 // ---------------------------------------------------------------------------

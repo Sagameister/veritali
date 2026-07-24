@@ -4,6 +4,14 @@ import type { Listing, ListingStatus, ListingSection } from "../types";
 const PROPSTACK_API_KEY = process.env.PROPSTACK_API_KEY;
 const API_URL = "https://api.propstack.de/v1/units?expand=1";
 
+function stripEmojis(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu, "")
+    .replace(/  +/g, " ")
+    .trim();
+}
+
 function slugify(text: string): string {
   return text
     .toString()
@@ -27,11 +35,11 @@ function formatPrice(value?: number): string {
 
 // Maps Propstack Unit structure to Veritali Listing interface
 function mapPropstackUnitToListing(unit: any): Listing {
-  const titleDe = unit.title?.value || unit.name || "Immobilie";
-  const titleEn = unit.custom_fields?.title_en || titleDe;
+  const titleDe = stripEmojis(unit.title?.value || unit.name || "Immobilie");
+  const titleEn = stripEmojis(unit.custom_fields?.title_en || titleDe);
 
-  const descDe = unit.description_note?.value || "";
-  const descEn = unit.custom_fields?.description_en || descDe;
+  const descDe = stripEmojis(unit.description_note?.value || "");
+  const descEn = stripEmojis(unit.custom_fields?.description_en || descDe);
 
   const slug = unit.custom_fields?.slug || slugify(titleDe);
 
@@ -64,8 +72,8 @@ function mapPropstackUnitToListing(unit: any): Listing {
     });
   }
 
-  const locDe = unit.location_note?.value || "";
-  const locEn = unit.custom_fields?.location_en || locDe;
+  const locDe = stripEmojis(unit.location_note?.value || "");
+  const locEn = stripEmojis(unit.custom_fields?.location_en || locDe);
   if (locDe) {
     sections.push({
       title: { de: "Lage", en: "Location" },
@@ -73,8 +81,8 @@ function mapPropstackUnitToListing(unit: any): Listing {
     });
   }
 
-  const furnDe = unit.furnishing_note?.value || "";
-  const furnEn = unit.custom_fields?.furnishing_en || furnDe;
+  const furnDe = stripEmojis(unit.furnishing_note?.value || "");
+  const furnEn = stripEmojis(unit.custom_fields?.furnishing_en || furnDe);
   if (furnDe) {
     sections.push({
       title: { de: "Ausstattung", en: "Furnishing" },
